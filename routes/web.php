@@ -3,7 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\AdminController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,15 +15,19 @@ use App\Http\Controllers\AdminController;
 | contains the "web" middleware group. Now create something great! uwu
 |
 */
+use App\Http\Controllers\AdminActionsController;
+use App\Http\Controllers\StudentController;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+    return redirect()->route('admin.actions');
+})->middleware(['auth'])->name('home');
+
+Route::get('/admin-actions', [AdminActionsController::class, 'index'])
+    ->middleware(['auth'])
+    ->name('admin.actions');
+
+Route::get('/students', [StudentController::class, 'index'])->name('students.index');
+Route::get('/students/{id}', [StudentController::class, 'show'])->name('students.show');
 
 Route::middleware([
     'auth:sanctum',
@@ -34,5 +38,3 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 });
-
-Route::post('/admin/login', [AdminController::class, 'login']); 

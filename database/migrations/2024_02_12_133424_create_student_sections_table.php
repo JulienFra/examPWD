@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('student_sections', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('course_id'); // Nouvelle colonne pour lier les cours
             $table->unsignedBigInteger('section_id');
+
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-            $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->timestamps();
         });
     }
