@@ -30,7 +30,9 @@ class StudentSeeder extends Seeder
         $htmlCourse = Course::where('name', 'html')->first();
 
         // Attacher les cours à l'élève Thibault dans la section "webdev"
-        $thibault->sections()->attach($webdevSection->id, ['course_id' => $jsCourse->id]);
-        $thibault->sections()->attach($webdevSection->id, ['course_id' => $htmlCourse->id]);
+        $thibault->sections()->attach([
+            $webdevSection->id => ['course_id' => $jsCourse->id],
+            $webdevSection->id => ['course_id' => $htmlCourse->id],
+        ]);
     }
 }

@@ -33,7 +33,7 @@ class SectionSeeder extends Seeder
             'end_time' => now(),
         ]);
 
-        // Attacher les cours à la section "webdev" en utilisant les tables intermédiaires
+        // Attacher les cours à la section "webdev"
         $webdevSection->courses()->attach([
             $phpCourse->id,
             $jsCourse->id,
