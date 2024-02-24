@@ -6,17 +6,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StudentSection extends Model
+class StudentCourse extends Model
 {
-    protected $fillable = ['student_id', 'section_id'];
+    protected $fillable = ['student_id', 'course_id'];
 
     public function student()
     {
         return $this->belongsTo(Student::class);
     }
 
-    public function section()
+    public function course()
     {
-        return $this->belongsTo(Section::class);
+        return $this->belongsTo(Course::class);
     }
 }
