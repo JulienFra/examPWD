@@ -1,5 +1,4 @@
 <?php
-
 // app/Models/Course.php
 
 namespace App\Models;
@@ -8,15 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'end_time'];
 
     public function sections()
     {
-        return $this->belongsToMany(Section::class, 'section_courses');
-    }
-
-    public function students()
-    {
-        return $this->belongsToMany(Student::class, 'student_courses');
+        return $this->belongsToMany(Section::class, 'section_courses')->withTimestamps();
     }
 }

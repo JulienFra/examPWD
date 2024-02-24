@@ -12,12 +12,10 @@ class SectionSeeder extends Seeder
 {
     public function run()
     {
-        // Créer la section "webdev"
         $webdevSection = Section::create([
             'name' => 'webdev',
         ]);
 
-        // Créer les cours "php", "js" et "html"
         $phpCourse = Course::create([
             'name' => 'php',
             'end_time' => now(),
@@ -33,11 +31,7 @@ class SectionSeeder extends Seeder
             'end_time' => now(),
         ]);
 
-        // Attacher les cours à la section "webdev"
-        $webdevSection->courses()->attach([
-            $phpCourse->id,
-            $jsCourse->id,
-            $htmlCourse->id,
-        ]);
+        // Attacher les cours à la section "webdev" en utilisant la table intermédiaire
+        $webdevSection->courses()->attach([$phpCourse->id, $jsCourse->id, $htmlCourse->id]);
     }
 }
