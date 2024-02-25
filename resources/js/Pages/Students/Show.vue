@@ -1,17 +1,19 @@
 <template>
     <div>
         <h1>{{ student.name }} {{ student.surname }}</h1>
-        <div v-if="student.sections.length">
+        <div v-if="student.sections">
             <h2>Sections :</h2>
             <ul>
                 <li v-for="section in student.sections" :key="section.id">
                     {{ section.name }}
-                    <h3>Cours :</h3>
-                    <ul>
-                        <li v-for="course in section.courses" :key="course.id">
-                            {{ course.name }}
-                        </li>
-                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div v-if="student.courses">
+            <h3>Cours :</h3>
+            <ul>
+                <li v-for="course in student.courses" :key="course.id">
+                    {{ course.name }}
                 </li>
             </ul>
         </div>
@@ -22,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { Link } from "@inertiajs/vue3";
 
 defineProps(["student"]);

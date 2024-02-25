@@ -20,8 +20,8 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        $student = Student::with('sections.courses')->findOrFail($id);
-
+        $student = Student::with(['courses', 'sections'])->findOrFail($id);
+    
         return Inertia::render('Students/Show', [
             'student' => $student,
         ]);
