@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('types', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('question_id');
-            $table->unsignedBigInteger('o_answer_id');
-            $table->unsignedBigInteger('multiple_answer_id');
-            $table->unsignedBigInteger('single_answer_id');
+            $table->unsignedBigInteger('question_id')->nullable();
+            $table->unsignedBigInteger('o_answer_id')->nullable();
+            $table->unsignedBigInteger('multiple_answer_id')->nullable();
+            $table->unsignedBigInteger('single_answer_id')->nullable();
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
             $table->foreign('o_answer_id')->references('id')->on('o_answer')->onDelete('cascade');
             $table->foreign('multiple_answer_id')->references('id')->on('multiple_answer')->onDelete('cascade');
