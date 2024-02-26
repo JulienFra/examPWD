@@ -18,11 +18,26 @@
                         <h3 class="text-lg font-semibold mb-2">
                             Liste des élèves :
                         </h3>
+                        <!-- Utilise students.index au lieu de students.show -->
                         <Link
                             :href="route('students.index')"
                             class="text-blue-600 hover:underline"
-                            >Voir la liste des élèves</Link
                         >
+                            Voir la liste des élèves
+                        </Link>
+                    </div>
+
+                    <!-- Ajout du lien vers la liste des sections -->
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold mb-2">
+                            Liste des sections :
+                        </h3>
+                        <Link
+                            :href="route('sections.index')"
+                            class="text-blue-600 hover:underline"
+                        >
+                            Voir la liste des sections
+                        </Link>
                     </div>
                 </div>
             </div>

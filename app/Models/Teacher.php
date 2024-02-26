@@ -7,5 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Teacher extends Model
 {
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['name'];
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
 }

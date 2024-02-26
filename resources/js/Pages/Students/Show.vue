@@ -1,3 +1,5 @@
+<!-- resources/js/Pages/Students/Show.vue -->
+
 <template>
     <div>
         <h1>{{ student.name }} {{ student.surname }}</h1>

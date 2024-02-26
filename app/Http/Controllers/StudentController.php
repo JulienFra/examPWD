@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Course;
+use App\Models\Section;
 use App\Models\Student;
 use App\Models\SectionCourse;
 use Illuminate\Http\Request;
@@ -21,7 +23,7 @@ class StudentController extends Controller
     public function show($id)
     {
         $student = Student::with(['courses', 'sections'])->findOrFail($id);
-    
+
         return Inertia::render('Students/Show', [
             'student' => $student,
         ]);
