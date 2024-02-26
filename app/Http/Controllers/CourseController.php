@@ -46,4 +46,13 @@ class CourseController extends Controller
 
         return redirect()->route('sections.show', ['id' => $sectionId]);
     }
+
+    public function destroy($id)
+    {
+        $course = Course::findOrFail($id);
+        $course->delete();
+
+        // Retourne une réponse (peut être personnalisé selon les besoins)
+        return redirect()->back();
+    }
 }
