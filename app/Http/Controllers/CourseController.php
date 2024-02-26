@@ -55,4 +55,34 @@ class CourseController extends Controller
         // Retourne une réponse (peut être personnalisé selon les besoins)
         return redirect()->back();
     }
+
+    public function edit($courseId)
+    {
+        $course = Course::findOrFail($courseId);
+        $teachers = Teacher::all(); // Charger tous les enseignants
+
+        return Inertia::render('Courses/Edit', [
+            'course' => $course,
+            'teachers' => $teachers,
+        ]);
+    }
+
+
+    public function update(Request $request, $courseId)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'end_time' => 'required|date',
+            'teacher_id' => 'exists:teachers,id',
+        ]);
+
+        $course = Course::findOrFail($courseId);
+
+        // Mettez à jour les champs du cours
+        $course->update([
+            'name' => $request->input('name'),
+            'end_time' => $request->input('end_time'),
+            'teacher_id' => $request->input('teacher_id'),
+        ]);
+    }
 }

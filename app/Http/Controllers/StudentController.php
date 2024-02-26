@@ -28,4 +28,13 @@ class StudentController extends Controller
             'student' => $student,
         ]);
     }
+
+    public function edit($id)
+    {
+        $student = Student::findOrFail($id);
+
+        return Inertia::render('Students/Edit', [
+            'student' => $student,
+        ]);
+    }
 }

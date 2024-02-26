@@ -43,6 +43,8 @@ Route::get('/sections/{id}/courses/create', [CourseController::class, 'create'])
 Route::post('/sections/{id}/courses', [CourseController::class, 'store'])->name('courses.store');
 Route::post('/sections/{sectionId}/courses', [CourseController::class, 'store'])->name('courses.store');
 Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('courses.destroy');
+Route::put('/courses/{courseId}', [CourseController::class, 'update'])->name('courses.update');
+Route::get('/courses/{courseId}/edit', [CourseController::class, 'edit'])->name('courses.edit');
 
 
 Route::middleware([
