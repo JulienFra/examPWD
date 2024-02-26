@@ -15,7 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->date('end_time');
+            $table->unsignedBigInteger('teacher_id')->nullable(); // Ajout de la colonne
+
             $table->timestamps();
+
+            $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('set null');
         });
     }
 
