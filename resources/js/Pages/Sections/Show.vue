@@ -32,6 +32,9 @@
             <button @click="deleteCourse">Oui</button>
             <button @click="closeModal">Annuler</button>
         </div>
+        <Link :href="route('courses.create', { id: section.id })"
+            >Créer un nouveau cours</Link
+        >
     </div>
 </template>
 
