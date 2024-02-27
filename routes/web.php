@@ -29,6 +29,14 @@ Route::get('/admin-actions', [AdminActionsController::class, 'index'])->name('ad
 // Routes pour les étudiants
 Route::get('/students', [StudentController::class, 'index'])->name('students.index');
 Route::get('/students/{id}', [StudentController::class, 'show'])->name('students.show');
+Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
+Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
+Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+Route::get('/students/{id}/edit-course', [StudentController::class, 'editCourse'])->name('students.edit-course');
+Route::put('/students/{id}/update-course', [StudentController::class, 'updateCourse'])->name('students.update-course');
+Route::put('/students/{id}/update-section', [StudentController::class, 'updateSection'])->name('students.updateSection');
+Route::get('/students/{id}/edit-section', [StudentController::class, 'editSection'])->name('students.edit-section');
 
 // Routes pour les sections
 Route::get('/sections', [SectionController::class, 'index'])->name('sections.index');
