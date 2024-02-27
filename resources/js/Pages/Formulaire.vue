@@ -1,48 +1,47 @@
 <template>
     <div>
-        <h1>Formulaire d'évaluation</h1>
-
-        <!-- Formulaire -->
-        <form @submit.prevent="submitForm">
-            <!-- Boucle sur chaque question -->
-            <div v-for="question in questions" :key="question.id">
-                <div>
-                    <!-- Affichage de la question -->
-                    <label>{{ question.content }}</label><br />
-
-                    <!-- Champ de texte pour le commentaire si disponible -->
-                    <textarea v-if="question.have_a_comment" v-model="comments[question.id]" cols="30" rows="3"></textarea><br />
-
-                    <!-- Choix multiple -->
-                    <div v-if="question.type === 'multiple_choice'">
-                        <!-- Boucle sur chaque option de choix -->
-                        <div v-for="option in question.multiple_answers" :key="option.id">
-                            <input type="radio" :id="'option_' + option.id" :name="'question_' + question.id" :value="option.id" v-model="answers[question.id]" />
-                            <label :for="'option_' + option.id">{{ option.content }}</label><br />
-                        </div>
-                    </div>
-
-                    <!-- Champ de texte pour la saisie de réponse -->
-                    <input v-else-if="question.type === 'text'" type="text" :id="'text_' + question.id" :name="'question_' + question.id" v-model="answers[question.id]" /><br />
-                </div>
+        <!-- Vérification si les questions sont chargées -->
+        <div v-if="questionsLoaded">
+            <!-- Vérification si des questions sont disponibles -->
+            <div v-if="questions && questions.length > 0">
+                <!-- Affichage du formulaire -->
+                <!-- ... -->
             </div>
-
-            <!-- Bouton de soumission du formulaire -->
-            <button type="submit">Soumettre</button>
-        </form>
+            <!-- Si aucune question n'est disponible -->
+            <div v-else>
+                <p>Aucune question disponible.</p>
+            </div>
+        </div>
+        <!-- Si les questions ne sont pas encore chargées -->
+        <div v-else>
+            <p>Chargement des questions...</p>
+        </div>
     </div>
 </template>
 
+
 <script>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { usePage } from '@inertiajs/inertia-vue3';
 
 export default {
     setup() {
         const { props } = usePage();
-        const questions = ref(props.questions); // Liste des questions récupérées depuis le backend
+        const questions = ref([]); // Liste des questions récupérées depuis le backend
+        const questionsLoaded = ref(false); // Indicateur de chargement des questions
         const answers = ref({}); // Réponses aux questions
         const comments = ref({}); // Commentaires sur les questions
+
+        onMounted(async () => {
+            // Vérifie si des questions ont été transmises depuis le contrôleur
+            if (props.questions && props.questions.length > 0) {
+                questions.value = props.questions;
+                questionsLoaded.value = true;
+            } else {
+                console.error("Aucune question transmise depuis le contrôleur.");
+                console.log("Données reçues depuis le contrôleur : ", props.questions);
+            }
+        });
 
         const submitForm = () => {
             // Rassemble les réponses et les commentaires pour soumission
@@ -50,6 +49,8 @@ export default {
                 answers: answers.value,
                 comments: comments.value,
             };
+
+            console.log('Questions récupérées depuis le backend :', questions.value);
 
             // Envoie les réponses au backend
             // Utilisez ici une requête HTTP (axios ou fetch) pour envoyer les données au backend
@@ -65,6 +66,7 @@ export default {
 
         return {
             questions,
+            questionsLoaded,
             answers,
             comments,
             submitForm,
