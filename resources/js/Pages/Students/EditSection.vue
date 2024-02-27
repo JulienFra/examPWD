@@ -50,19 +50,14 @@ const updateSection = () => {
         onSuccess: () => {
             console.log("Update successful!");
 
-            // Si aucune section n'est sélectionnée, attribuez la valeur par défaut "Aucune section"
             if (formUpdateSection.selectedSections.length === 0) {
                 formUpdateSection.selectedSections = ['Aucune section'];
             }
 
-            // Vérifiez si une section a été désélectionnée
             const deselectedSections = sections.filter(section => !formUpdateSection.selectedSections.includes(section.id));
 
-            // Si une section a été désélectionnée, supprimez tous les cours liés à cette section
             deselectedSections.forEach(section => {
                 section.courses.forEach(course => {
-                    // Supprimez le cours
-                    // Vous devrez peut-être ajuster cette partie pour l'adapter à votre code
                     formUpdateSection.delete(route('courses.destroy', { id: course.id }), {
                         preserveScroll: true,
                         onSuccess: () => {
