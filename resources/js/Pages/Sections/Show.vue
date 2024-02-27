@@ -16,11 +16,15 @@
                         {{ course.teacher.name }}
                     </div>
 
-                    <!-- Ajout du bouton de suppression -->
+                    <!-- Ajout des boutons pour supprimer et modifier -->
                     <button @click="confirmDelete(course.id)">Supprimer</button>
+                    <button @click="editCourse(course.id)">Modifier</button>
                 </li>
             </ul>
         </div>
+        <Link :href="route('courses.create', { id: section.id })"
+            >Ajouter un cours</Link
+        >
 
         <Link :href="route('sections.index')"
             >Retour à la liste des sections</Link
@@ -32,9 +36,6 @@
             <button @click="deleteCourse">Oui</button>
             <button @click="closeModal">Annuler</button>
         </div>
-        <Link :href="route('courses.create', { id: section.id })"
-            >Créer un nouveau cours</Link
-        >
     </div>
 </template>
 
@@ -63,6 +64,11 @@ const deleteCourse = () => {
 
 const closeModal = () => {
     confirmingCourseDeletion.value = false;
+};
+
+const editCourse = (id) => {
+    // Rediriger vers la page de modification du cours avec l'ID du cours
+    window.location.href = route("courses.edit", { courseId: id });
 };
 
 defineProps(["section"]);

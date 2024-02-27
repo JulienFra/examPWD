@@ -18,7 +18,17 @@
                     {{ course.name }}
                 </li>
             </ul>
+            <Link :href="route('students.edit', { id: student.id })"
+                >Modifier les informations</Link
+            >
+            <Link :href="route('students.edit-section', { id: student.id })"
+                >Modifier la section</Link
+            >
+            <Link :href="route('students.edit-course', { id: student.id })"
+                >Modifier les cours</Link
+            >
         </div>
+
         <Link :href="route('students.index')"
             >Retour à la liste des élèves</Link
         >

@@ -18,4 +18,15 @@ class Student extends Model
     {
         return $this->belongsToMany(Course::class, 'student_courses')->withTimestamps();
     }
+    public function updateCourses(array $sectionIds)
+    {
+        $this->courses()->sync([]);
+
+        foreach ($sectionIds as $sectionId) {
+            $section = Section::find($sectionId);
+            if ($section) {
+                $this->courses()->syncWithoutDetaching($section->courses);
+            }
+        }
+    }
 }
