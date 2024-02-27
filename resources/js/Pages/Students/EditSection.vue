@@ -49,7 +49,25 @@ const updateSection = () => {
         preserveScroll: true,
         onSuccess: () => {
             console.log("Update successful!");
+
+            if (formUpdateSection.selectedSections.length === 0) {
+                formUpdateSection.selectedSections = ['Aucune section'];
+            }
+
+            const deselectedSections = sections.filter(section => !formUpdateSection.selectedSections.includes(section.id));
+
+            deselectedSections.forEach(section => {
+                section.courses.forEach(course => {
+                    formUpdateSection.delete(route('courses.destroy', { id: course.id }), {
+                        preserveScroll: true,
+                        onSuccess: () => {
+                            console.log("Course deletion successful!");
+                        },
+                    });
+                });
+            });
         },
     });
 };
+
 </script>

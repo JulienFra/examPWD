@@ -68,31 +68,17 @@ class StudentController extends Controller
 
     public function updateSection(Request $request, $studentId)
     {
-        $request->validate([
-            'selectedSections' => 'required|array',
-            'selectedSections.*' => 'exists:sections,id',
-        ]);
+        $selectedSections = $request->input('selectedSections', []);
 
         $student = Student::findOrFail($studentId);
 
-        // Récupérer les sections existantes avant la mise à jour
-        $existingSections = $student->sections->pluck('id')->toArray();
+        $student->sections()->sync($selectedSections);
 
-        // Mettre à jour les sections de l'élève
-        $student->sections()->sync($request->selectedSections);
+        $removedCourses = Course::whereDoesntHave('sections', function ($query) use ($selectedSections) {
+            $query->whereIn('section_id', $selectedSections);
+        })->get();
 
-        // Sections retirées
-        $removedSections = array_diff($existingSections, $request->selectedSections);
-
-        // Supprimer les cours associés aux sections retirées
-        if (!empty($removedSections)) {
-            $student->courses()->whereHas('sections', function ($query) use ($removedSections) {
-                $query->whereIn('sections.id', $removedSections);
-            })->detach();
-        }
-
-        // Mettre à jour les cours en fonction des sections sélectionnées
-        $student->updateCourses($request->selectedSections);
+        $student->courses()->detach($removedCourses);
 
         return redirect()->route('students.show', $student->id);
     }
