@@ -19,10 +19,11 @@ use App\Http\Controllers\AdminActionsController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\FormController;
 
 Route::get('/', function () {
     return redirect()->route('admin.actions.index');
-})->middleware(['auth'])->name('home');
+})->name('home');
 
 Route::get('/admin-actions', [AdminActionsController::class, 'index'])->name('admin.actions.index');
 
@@ -64,3 +65,5 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 });
+
+Route::get('/form/{id}', [FormController::class, 'show'])->name('form.show');
