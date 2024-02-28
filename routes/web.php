@@ -20,6 +20,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\TeacherController;
 
 Route::get('/', function () {
     return redirect()->route('admin.actions.index');
@@ -28,9 +29,12 @@ Route::get('/', function () {
 Route::get('/admin-actions', [AdminActionsController::class, 'index'])->name('admin.actions.index');
 
 // Routes pour les étudiants
+Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
+
 Route::get('/students', [StudentController::class, 'index'])->name('students.index');
 Route::get('/students/{id}', [StudentController::class, 'show'])->name('students.show');
 Route::post('/students', [StudentController::class, 'store'])->name('students.store');
+
 Route::get('/students/{id}/edit', [StudentController::class, 'edit'])->name('students.edit');
 Route::put('/students/{id}', [StudentController::class, 'update'])->name('students.update');
 Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
@@ -38,6 +42,16 @@ Route::get('/students/{id}/edit-course', [StudentController::class, 'editCourse'
 Route::put('/students/{id}/update-course', [StudentController::class, 'updateCourse'])->name('students.update-course');
 Route::put('/students/{id}/update-section', [StudentController::class, 'updateSection'])->name('students.updateSection');
 Route::get('/students/{id}/edit-section', [StudentController::class, 'editSection'])->name('students.edit-section');
+Route::delete('/students/{id}', [StudentController::class, 'destroy'])->name('students.destroy');
+
+Route::get('/teachers/create', [TeacherController::class, 'create'])->name('teachers.create');
+Route::get('/teachers', [TeacherController::class, 'index'])->name('teachers.index');
+Route::get('/teachers/{id}', [TeacherController::class, 'show'])->name('teachers.show');
+Route::post('/teachers/store', [TeacherController::class, 'store'])->name('teachers.store');
+Route::get('/teachers/{id}/edit', [TeacherController::class, 'edit'])->name('teachers.edit');
+Route::put('/teachers/{id}/update', [TeacherController::class, 'update'])->name('teachers.update');
+Route::delete('/teachers/{id}/destroy', [TeacherController::class, 'destroy'])->name('teachers.destroy');
+
 
 // Routes pour les sections
 Route::get('/sections', [SectionController::class, 'index'])->name('sections.index');

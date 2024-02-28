@@ -15,7 +15,6 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { useForm } from "@inertiajs/vue3";
 
 const formCreateSection = useForm({

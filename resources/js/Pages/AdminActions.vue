@@ -39,6 +39,19 @@
                             Voir la liste des sections
                         </Link>
                     </div>
+
+                    <!-- Ajout du lien vers la liste des enseignants -->
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold mb-2">
+                            Liste des enseignants :
+                        </h3>
+                        <Link
+                            :href="route('teachers.index')"
+                            class="text-blue-600 hover:underline"
+                        >
+                            Voir la liste des enseignants
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

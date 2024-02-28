@@ -25,10 +25,7 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
 import { ref } from "vue";
-import { usePage } from "@inertiajs/vue3";
 import { useForm } from "@inertiajs/vue3";
-
-const { $inertia } = usePage();
 
 const confirmingSectionDeletion = ref(false);
 const sectionIdToDelete = ref(null);
