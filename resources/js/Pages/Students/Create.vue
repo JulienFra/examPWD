@@ -1,65 +1,62 @@
 <template>
     <div>
-        <Head title="Ajouter Élève" />
+        <h1>Ajouter un étudiant</h1>
 
-        <form
-            @submit.prevent="submitForm"
-            class="border flex space-x-4 p-4 rounded"
-        >
-            <div class="flex-1">
+        <form @submit.prevent="createStudent">
+            <div>
+                <label for="name">Prénom:</label>
                 <input
-                    class="block px-2 py-1.5 bg-gray-100 rounded w-full"
-                    placeholder="Nom"
+                    v-model="formCreateStudent.name"
                     type="text"
-                    v-model="form.name"
+                    id="name"
+                    required
                 />
-                <InputError :message="form.errors.name" class="mt-2" />
-            </div>
-
-            <div class="flex-1">
-                <input
-                    class="block px-2 py-1.5 bg-gray-100 rounded w-full"
-                    placeholder="Prénom"
-                    type="text"
-                    v-model="form.surname"
-                />
-                <InputError :message="form.errors.surname" class="mt-2" />
-            </div>
-
-            <div class="flex-1">
-                <input
-                    class="block px-2 py-1.5 bg-gray-100 rounded w-full"
-                    placeholder="Email"
-                    type="email"
-                    v-model="form.email"
-                />
-                <InputError :message="form.errors.email" class="mt-2" />
             </div>
 
             <div>
-                <button
-                    type="submit"
-                    class="px-6 py-1.5 bg-indigo-600 rounded text-white"
-                >
-                    Suivant
-                </button>
+                <label for="surname">Nom:</label>
+                <input
+                    v-model="formCreateStudent.surname"
+                    type="text"
+                    id="surname"
+                    required
+                />
             </div>
+
+            <div>
+                <label for="email">Email:</label>
+                <input
+                    v-model="formCreateStudent.email"
+                    type="email"
+                    id="email"
+                    required
+                />
+            </div>
+
+            <button type="submit">Ajouter</button>
         </form>
+
+        <Link :href="route('students.index')"
+            >Retour à la liste des étudiants</Link
+        >
     </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useForm } from "@inertiajs/inertia-vue3";
-import InputError from "./InputError.vue";
+import { Link, useForm } from "@inertiajs/vue3";
 
-const form = useForm({
+const formCreateStudent = useForm({
     name: "",
     surname: "",
     email: "",
 });
 
-const submitForm = () => {
-    form.post(route("students.store"));
+const createStudent = () => {
+    formCreateStudent.post(route("students.store"), {
+        preserveScroll: true,
+        onSuccess: () => {
+            window.location.href = route("students.index");
+        },
+    });
 };
 </script>

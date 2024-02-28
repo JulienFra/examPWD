@@ -20,6 +20,11 @@ class StudentController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return Inertia::render('Students/Create');
+    }
+
     public function show($id)
     {
         $student = Student::with(['courses', 'sections'])->findOrFail($id);
@@ -125,5 +130,30 @@ class StudentController extends Controller
         $student->courses()->sync($request->selectedCourses);
 
         return redirect()->route('students.show', $student->id);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string',
+            'surname' => 'required|string',
+            'email' => 'required|email|unique:students,email',
+        ]);
+
+        $student = Student::create([
+            'name' => $request->input('name'),
+            'surname' => $request->input('surname'),
+            'email' => $request->input('email'),
+        ]);
+
+        return redirect()->route('students.index');
+    }
+
+    public function destroy($id)
+    {
+        $student = Student::findOrFail($id);
+        $student->delete();
+
+        return redirect()->route('students.index');
     }
 }

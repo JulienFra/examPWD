@@ -6,12 +6,12 @@
 
         <form @submit.prevent="updateStudent">
             <div>
-                <label>Nom:</label>
+                <label>Prénom:</label>
                 <input v-model="formUpdateStudent.name" type="text" required />
             </div>
 
             <div>
-                <label>Prénom:</label>
+                <label>Nom:</label>
                 <input
                     v-model="formUpdateStudent.surname"
                     type="text"
