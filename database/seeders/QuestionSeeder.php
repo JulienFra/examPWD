@@ -1,11 +1,12 @@
 <?php
+
 namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use App\Models\Form;
 use App\Models\Question;
-use App\Models\SingleAnswer;
-use App\Models\MultipleAnswer;
-use App\Models\OAnswer;
+use App\Models\Type;
+use App\Models\Answer;
 
 class QuestionSeeder extends Seeder
 {
@@ -19,54 +20,59 @@ class QuestionSeeder extends Seeder
         // Créer un formulaire
         $form = Form::create();
 
-        // Créer des questions
+        // Créer les types de questions
+        $types = [
+            ['name' => 'open'],
+            ['name' => 'multiple'],
+            ['name' => 'single'],
+        ];
+
+        foreach ($types as $typeData) {
+            Type::create($typeData);
+        }
+
+        // Créer des exemples de questions avec différents types
         $questions = [
             [
                 'content' => 'Quelle est votre couleur préférée?',
-                'have_a_comment' => true,
+                'type' => 'single',
+                'answers' => ['Rouge', 'Bleu', 'Vert'],
+                'have_a_comment' => true, // Ajout de la valeur pour have_a_comment
+            ],
+            [
+                'content' => 'Quels animaux préférez-vous?',
+                'type' => 'multiple',
+                'answers' => ['Chien', 'Chat', 'Oiseau'],
+                'have_a_comment' => true, // Ajout de la valeur pour have_a_comment
             ],
             [
                 'content' => 'Quel est votre animal préféré?',
+                'type' => 'open',
+                'answers' => ['Chien', 'Chat', 'Oiseau'],
                 'have_a_comment' => false,
             ],
             // Ajoutez d'autres questions au besoin
         ];
 
         foreach ($questions as $questionData) {
+            // Récupérer l'ID du type de question
+            $typeId = Type::where('name', $questionData['type'])->first()->id;
+
+            // Créer la question
             $question = Question::create([
                 'form_id' => $form->id,
                 'content' => $questionData['content'],
-                'have_a_comment' => $questionData['have_a_comment'],
+                'type_id' => $typeId,
+                'have_a_comment' => $questionData['have_a_comment'], // Attribuer la valeur à have_a_comment
             ]);
 
-            // Créer des réponses uniques pour chaque question
-            SingleAnswer::create([
-                'question_id' => $question->id,
-                'content' => 'Rouge',
-            ]);
-
-            SingleAnswer::create([
-                'question_id' => $question->id,
-                'content' => 'Bleu',
-            ]);
-
-            // Créer des réponses multiples pour chaque question
-            MultipleAnswer::create([
-                'question_id' => $question->id,
-                'content' => 'Chien',
-            ]);
-
-            MultipleAnswer::create([
-                'question_id' => $question->id,
-                'content' => 'Chat',
-            ]);
-
-            // Créer des réponses ouvertes pour chaque question
-            OAnswer::create([
-                'question_id' => $question->id,
-                'content' => 'J\'aime les chiens et les chats',
-            ]);
+            // Ajouter les réponses associées à la question
+            foreach ($questionData['answers'] as $answerContent) {
+                Answer::create([
+                    'question_id' => $question->id,
+                    'content' => $answerContent,
+                ]);
+            }
         }
     }
 }
-

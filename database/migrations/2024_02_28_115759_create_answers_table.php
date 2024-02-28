@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('questions', function (Blueprint $table) {
+        Schema::create('answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('form_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('question_id');
             $table->text('content');
-            $table->boolean('have_a_comment');
-            $table->softDeletes();
             $table->timestamps();
-            $table->unsignedBigInteger('type_id')->nullable();
-            $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');
+
+            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
         });
     }
 
@@ -28,9 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('questions');
+        Schema::dropIfExists('answers');
     }
 };
-
-
-

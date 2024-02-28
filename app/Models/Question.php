@@ -9,10 +9,20 @@ class Question extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['content', 'have_a_comment'];
+    protected $fillable = ['content', 'have_a_comment', 'type_id'];
 
     public function form()
     {
         return $this->belongsTo(Form::class);
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(Type::class);
     }
 }
