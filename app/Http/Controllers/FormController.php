@@ -16,7 +16,7 @@ class FormController extends Controller
         return Inertia::render('Formulaire', [
             'question' => $question,
             'questions' => Question::with(['type', 'answers'])->where('is_deleted', '!=', 1)->get(), // Pass all questions excluding deleted ones
-            'answers' => Answer::all(), // Pass all answers
+            'answers' => Answer::all(), 
         ]);
     }
 }
