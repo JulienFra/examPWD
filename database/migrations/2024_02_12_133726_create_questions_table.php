@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('form_id')->constrained()->onDelete('cascade');
             $table->text('content');
+            $table->text('choix')->nullable();
             $table->boolean('have_a_comment');
             $table->softDeletes();
             $table->timestamps();
@@ -31,6 +31,3 @@ return new class extends Migration
         Schema::dropIfExists('questions');
     }
 };
-
-
-
