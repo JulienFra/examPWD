@@ -20,6 +20,7 @@ class QuestionSeeder extends Seeder
         // Créer un formulaire
         $form = Form::create();
 
+
         // Créer les types de questions
         $types = [
             ['name' => 'open'],
@@ -60,7 +61,6 @@ class QuestionSeeder extends Seeder
 
             // Créer la question
             $question = Question::create([
-                'form_id' => $form->id,
                 'content' => $questionData['content'],
                 'type_id' => $typeId,
                 'have_a_comment' => $questionData['have_a_comment'], // Attribuer la valeur à have_a_comment
@@ -69,6 +69,7 @@ class QuestionSeeder extends Seeder
             // Ajouter les réponses associées à la question
             foreach ($questionData['answers'] as $answerContent) {
                 Answer::create([
+                    'course_id' => 1,
                     'question_id' => $question->id,
                     'content' => $answerContent,
                 ]);

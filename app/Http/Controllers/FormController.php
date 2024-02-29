@@ -3,28 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Form;
 use Inertia\Inertia;
 use App\Models\Question;
 
 class FormController extends Controller
 {
     public function show($id)
-{
-    $form = Form::findOrFail($id);
-    $questions = $form->questions;
+    {
+        // Fetch all questions
+        $questions = Question::all();
 
-    // Récupérer les réponses pour chaque question
-    $answers = [];
-    foreach ($questions as $question) {
-        $answers[$question->id] = $question->answers;
+        // Récupérer les réponses pour chaque question
+        $answers = [];
+        foreach ($questions as $question) {
+            $answers[$question->id] = explode("#", $question->choix);
+        }
+
+        return Inertia::render('Formulaire', [
+            'form' => null, // You can remove this if not needed in the component
+            'questions' => $questions,
+            'answers' => $answers,
+        ]);
     }
-
-    return Inertia::render('Formulaire', [
-        'form' => $form,
-        'questions' => $questions,
-        'answers' => $answers,
-    ]);
-}
-
 }
