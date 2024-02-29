@@ -16,64 +16,42 @@ class QuestionSeeder extends Seeder
      * @return void
      */
     public function run()
+
     {
-        // Créer un formulaire
-        $form = Form::create();
+        // Create types
+        $openType = Type::create(['name' => 'Ouverte']);
+        $singleChoiceType = Type::create(['name' => 'Choix unique']);
+        $multipleChoiceType = Type::create(['name' => 'Choix multiple']);
 
+        // Seed questions
+        $openQuestion = Question::create([
+            'content' => 'Pourquoi la vie ?',
+            'have_a_comment' => true,
+            'type_id' => $openType->id,
+        ]);
 
-        // Créer les types de questions
-        $types = [
-            ['name' => 'open'],
-            ['name' => 'multiple'],
-            ['name' => 'single'],
-        ];
+        $singleChoiceQuestion = Question::create([
+            'content' => 'Quelles sont tes matières préférées à l\'école ?',
+            'have_a_comment' => false,
+            'type_id' => $singleChoiceType->id,
+        ]);
 
-        foreach ($types as $typeData) {
-            Type::create($typeData);
-        }
+        $multipleChoiceQuestion = Question::create([
+            'content' => 'Quel animal aimes-tu le plus ?',
+            'have_a_comment' => false,
+            'type_id' => $multipleChoiceType->id,
+        ]);
 
-        // Créer des exemples de questions avec différents types
-        $questions = [
-            [
-                'content' => 'Quelle est votre couleur préférée?',
-                'type' => 'single',
-                'answers' => ['Rouge', 'Bleu', 'Vert'],
-                'have_a_comment' => true, // Ajout de la valeur pour have_a_comment
-            ],
-            [
-                'content' => 'Quels animaux préférez-vous?',
-                'type' => 'multiple',
-                'answers' => ['Chien', 'Chat', 'Oiseau'],
-                'have_a_comment' => true, // Ajout de la valeur pour have_a_comment
-            ],
-            [
-                'content' => 'Quel est votre animal préféré?',
-                'type' => 'open',
-                'answers' => ['Chien', 'Chat', 'Oiseau'],
-                'have_a_comment' => false,
-            ],
-            // Ajoutez d'autres questions au besoin
-        ];
+        // Add answers for multiple-choice question
+        $this->addMultipleChoiceAnswers($multipleChoiceQuestion);
+    }
 
-        foreach ($questions as $questionData) {
-            // Récupérer l'ID du type de question
-            $typeId = Type::where('name', $questionData['type'])->first()->id;
+    protected function addMultipleChoiceAnswers(Question $question)
+    {
+        $choices = ['Chat', 'Chien', 'Cheval'];
 
-            // Créer la question
-            $question = Question::create([
-                'content' => $questionData['content'],
-                'type_id' => $typeId,
-                'have_a_comment' => $questionData['have_a_comment'], // Attribuer la valeur à have_a_comment
-            ]);
-
-            // Ajouter les réponses associées à la question
-            foreach ($questionData['answers'] as $answerContent) {
-                Answer::create([
-                    'course_id' => 1,
-                    'question_id' => $question->id,
-                    'content' => $answerContent,
-                ]);
-            }
+        foreach ($choices as $choice) {
+            $question->answers()->create(['content' => $choice]);
         }
     }
 }

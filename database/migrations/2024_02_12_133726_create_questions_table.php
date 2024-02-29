@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->text('content');
-            $table->text('choix')->nullable();
-            $table->boolean('have_a_comment');
+            $table->boolean('have_a_comment')->default(false);
+            $table->boolean('is_deleted')->default(false);
+
             $table->softDeletes();
             $table->timestamps();
             $table->unsignedBigInteger('type_id')->nullable();

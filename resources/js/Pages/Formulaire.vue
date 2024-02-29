@@ -22,7 +22,7 @@
                             ></textarea>
                             <div v-if="question.type_id === 2">
                                 <label
-                                    v-for="answer in answers[question.id]"
+                                    v-for="answer in question.answers"
                                     :key="answer.id"
                                 >
                                     <input
@@ -32,12 +32,12 @@
                                             responses[question.id][answer.id]
                                         "
                                     />
-                                    {{ answer }}
+                                    {{ answer.content }}
                                 </label>
                             </div>
                             <div v-if="question.type_id === 3">
                                 <label
-                                    v-for="answer in answers[question.id]"
+                                    v-for="answer in question.answers"
                                     :key="answer.id"
                                 >
                                     <input
@@ -45,7 +45,7 @@
                                         :value="answer.id"
                                         v-model="responses[question.id]"
                                     />
-                                    {{ answer }}
+                                    {{ answer.content }}
                                 </label>
                             </div>
                             <!-- Espace pour le commentaire -->
@@ -80,30 +80,23 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { defineProps, ref, onMounted } from "vue";
 
-// Définis les propriétés dont le composant a besoin
 const props = defineProps(["questions", "answers"]);
 
-// Crée des refs pour les données du composant
-const questionsLoaded = ref(false); // Indicateur de chargement des questions
-const responses = ref({}); // Stocke les réponses de l'utilisateur
-const comments = ref({}); // Stocke les commentaires de l'utilisateur
+const questionsLoaded = ref(false);
+const responses = ref({});
+const comments = ref({});
 
-// Exécute du code après que le composant est monté
 onMounted(() => {
     if (props.questions && props.questions.length > 0) {
         questionsLoaded.value = true;
-        // Initialiser les réponses avec des valeurs vides pour chaque question
         props.questions.forEach((question) => {
-            // Si le type de question est 2 (checkbox), initialisez les réponses avec un objet vide
             if (question.type_id === 2) {
                 responses.value[question.id] = {};
             } else {
-                // Sinon, initialisez les réponses avec une chaîne vide
                 responses.value[question.id] = "";
             }
-            // Initialiser les commentaires avec une chaîne vide pour chaque question
             comments.value[question.id] = "";
         });
     } else {
@@ -111,10 +104,8 @@ onMounted(() => {
     }
 });
 
-// Fonction pour soumettre le formulaire
 const submitForm = () => {
-    // Envoyer les réponses et les commentaires à votre backend
-    console.log("Réponses:", responses.value);
-    console.log("Commentaires:", comments.value);
+    console.log("Réponses :", responses.value);
+    console.log("Commentaires :", comments.value);
 };
 </script>

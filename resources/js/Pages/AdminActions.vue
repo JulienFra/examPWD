@@ -52,6 +52,17 @@
                             Voir la liste des enseignants
                         </Link>
                     </div>
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold mb-2">
+                            Liste des questions :
+                        </h3>
+                        <Link
+                            :href="route('questions.index')"
+                            class="text-blue-600 hover:underline"
+                        >
+                            Voir la liste des questions
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>

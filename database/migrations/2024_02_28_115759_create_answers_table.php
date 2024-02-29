@@ -13,15 +13,9 @@ return new class extends Migration
     {
         Schema::create('answers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('course_id');
-            $table->unsignedBigInteger('question_id');
-            $table->text('content')->nullable();
-            $table->text('comment')->nullable();
-
+            $table->foreignId('question_id')->constrained(); // Foreign key linking to questions table
+            $table->string('content'); // Content of the answer
             $table->timestamps();
-
-            $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
-            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
         });
     }
 

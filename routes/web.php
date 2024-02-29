@@ -20,6 +20,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TeacherController;
 
 Route::get('/', function () {
@@ -69,6 +70,21 @@ Route::delete('/courses/{id}', [CourseController::class, 'destroy'])->name('cour
 Route::put('/courses/{courseId}', [CourseController::class, 'update'])->name('courses.update');
 Route::get('/courses/{courseId}/edit', [CourseController::class, 'edit'])->name('courses.edit');
 
+Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
+Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
+Route::get('/questions/{id}', [QuestionController::class, 'show'])->name('questions.show');
+Route::delete('questions/{id}', [QuestionController::class, 'destroy'])->name('questions.destroy');
+
+Route::get('questions/{id}/edit-contenu', [QuestionController::class, 'editContenu'])->name('questions.editContenu');
+Route::put('questions/{id}/update-contenu', [QuestionController::class, 'updateContenu'])->name('questions.updateContenu');
+
+Route::get('questions/{id}/edit-type', [QuestionController::class, 'editType'])->name('questions.editType');
+Route::put('questions/{id}/update-type', [QuestionController::class, 'updateType'])->name('questions.updateType');
+
+Route::get('questions/{id}/edit-reponses', [QuestionController::class, 'editReponses'])->name('questions.editReponses');
+Route::put('questions/{id}/update-reponses', [QuestionController::class, 'updateReponses'])->name('questions.updateReponses');
+
+Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
 
 Route::middleware([
     'auth:sanctum',
