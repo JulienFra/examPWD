@@ -3,7 +3,7 @@
 <template>
     <AppLayout title="Actions Administratives">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl text-gray-400 leading-tight">
                 Actions Administratives
             </h2>
         </template>
@@ -15,7 +15,7 @@
                 >
                     <!-- Contenu de la page -->
                     <div class="mb-4">
-                        <h3 class="text-lg font-semibold mb-2">
+                        <h3 class="text-lg font-semibold mb-2 text-black">
                             Liste des élèves :
                         </h3>
                         <!-- Utilise students.index au lieu de students.show -->
@@ -29,7 +29,7 @@
 
                     <!-- Ajout du lien vers la liste des sections -->
                     <div class="mb-4">
-                        <h3 class="text-lg font-semibold mb-2">
+                        <h3 class="text-lg font-semibold mb-2 text-black">
                             Liste des sections :
                         </h3>
                         <Link
@@ -42,7 +42,7 @@
 
                     <!-- Ajout du lien vers la liste des enseignants -->
                     <div class="mb-4">
-                        <h3 class="text-lg font-semibold mb-2">
+                        <h3 class="text-lg font-semibold mb-2 text-black">
                             Liste des enseignants :
                         </h3>
                         <Link
