@@ -56,10 +56,14 @@ class QuestionController extends Controller
     {
         $question = Question::findOrFail($id);
 
-        // Validez les données du formulaire ici si nécessaire
+        $request->validate([
+            'content' => 'required',
+            'have_a_comment' => 'boolean', // Assurez-vous que le champ est booléen
+        ]);
 
         $question->update([
             'content' => $request->input('content'),
+            'have_a_comment' => $request->input('have_a_comment', false),
         ]);
 
         return redirect()->route('questions.show', ['id' => $question->id])->with('success', 'Contenu de la question mis à jour avec succès!');

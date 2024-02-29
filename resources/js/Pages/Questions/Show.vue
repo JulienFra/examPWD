@@ -20,6 +20,11 @@
                     </li>
                 </ul>
             </div>
+            <!-- Affiche la section Commentaire indépendamment de la valeur de have_a_comment -->
+            <div class="mt-4">
+                <p class="font-semibold">Commentaire:</p>
+                <p>{{ question.have_a_comment ? "Oui" : "Non" }}</p>
+            </div>
             <!-- Bouton de modification -->
             <Link
                 :href="route('questions.editContenu', { id: question.id })"

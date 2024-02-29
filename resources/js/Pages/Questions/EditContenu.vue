@@ -12,6 +12,14 @@
                 ></textarea>
             </div>
 
+            <div>
+                <label>Commentaire:</label>
+                <input
+                    v-model="formUpdateQuestion.have_a_comment"
+                    type="checkbox"
+                />
+            </div>
+
             <button type="submit">Modifier le Contenu</button>
         </form>
 
@@ -29,6 +37,7 @@ const { question } = defineProps(["question"]);
 
 const formUpdateQuestion = useForm("put", {
     content: question.content,
+    have_a_comment: question.have_a_comment,
 });
 
 const updateContenu = () => {
