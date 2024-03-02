@@ -66,14 +66,37 @@
                 <div v-else>
                     <p>Chargement des questions...</p>
                 </div>
-                <div class="mt-6">
-                    <button
-                        @click="submitForm"
-                        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                <!-- Formulaire pour saisir le prompt -->
+                <form @submit.prevent="submitPrompt" class="mt-6">
+                    <label for="prompt" class="font-semibold"
+                        >Enter your prompt:</label
                     >
-                        Envoyer
+                    <textarea
+                        id="prompt"
+                        v-model="prompt"
+                        rows="4"
+                        cols="50"
+                        class="mt-2"
+                    ></textarea>
+                    <button
+                        type="submit"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-4"
+                    >
+                        Generate Text
                     </button>
+                </form>
+                <!-- Affichage du texte généré -->
+                <div v-if="generatedText" class="mt-6">
+                    <h2 class="font-semibold">Generated Text:</h2>
+                    <p>{{ generatedText }}</p>
                 </div>
+                <!-- Fin des modifications -->
+                <button
+                    @click="submitForm"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mt-6"
+                >
+                    Envoyer
+                </button>
             </div>
         </div>
     </div>
@@ -81,12 +104,15 @@
 
 <script setup>
 import { defineProps, ref, onMounted } from "vue";
+import axios from "axios";
 
 const props = defineProps(["questions", "answers"]);
 
 const questionsLoaded = ref(false);
 const responses = ref({});
 const comments = ref({});
+const prompt = ref(""); // Nouvelle variable pour stocker le prompt saisi
+const generatedText = ref(""); // Nouvelle variable pour stocker le texte généré
 
 onMounted(() => {
     if (props.questions && props.questions.length > 0) {
@@ -107,5 +133,17 @@ onMounted(() => {
 const submitForm = () => {
     console.log("Réponses :", responses.value);
     console.log("Commentaires :", comments.value);
+};
+
+// Nouvelle fonction pour soumettre le prompt et générer le texte
+const submitPrompt = async () => {
+    try {
+        const response = await axios.post("/generate-text", {
+            prompt: prompt.value,
+        });
+        generatedText.value = response.data;
+    } catch (error) {
+        console.error("Error generating text:", error);
+    }
 };
 </script>
