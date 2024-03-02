@@ -26,7 +26,6 @@ class QuestionController extends Controller
         $newQuestion = Question::create([
             'content' => $request->input('content'),
             'type_id' => 1, // Ajoutez la logique nécessaire pour le type de la question
-            'have_a_comment' => $request->input('have_a_comment', false),
         ]);
 
         return redirect()->route('questions.show', ['id' => $newQuestion->id])->with('success', 'Question ajoutée avec succès!');
