@@ -1,7 +1,5 @@
 <?php
 
-// app/Models/Question.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +9,13 @@ class Question extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['have_a_comment'];
+    protected $fillable = ['content', 'have_a_comment', 'type_id', 'is_deleted'];
+
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
 
     public function type()
     {

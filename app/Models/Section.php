@@ -9,13 +9,13 @@ class Section extends Model
 {
     protected $fillable = ['name'];
 
-    public function courses()
-    {
-        return $this->belongsToMany(Course::class, 'section_courses');
-    }
-
     public function students()
     {
-        return $this->belongsToMany(Student::class, 'student_sections');
+        return $this->belongsToMany(Student::class, 'student_sections')->withTimestamps();
+    }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'section_courses')->withTimestamps();
     }
 }
