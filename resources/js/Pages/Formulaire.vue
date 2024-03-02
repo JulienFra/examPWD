@@ -1,92 +1,95 @@
 <template>
-    <div
-        class="min-h-screen bg-gradient-to-b from-blue-700 to-purple-900 flex justify-center items-center"
-    >
-        <div class="bg-white p-8 rounded-lg shadow-lg">
-            <h1 class="text-3xl font-bold mb-4">Formulaire</h1>
-            <div class="flex flex-col items-center">
-                <div v-if="questionsLoaded">
-                    <div v-if="questions && questions.length > 0">
-                        <div
-                            v-for="question in questions"
-                            :key="question.id"
-                            class="mb-4"
-                        >
-                            <p class="font-semibold">{{ question.content }}</p>
-                            <textarea
-                                v-if="question.type_id === 1"
-                                rows="4"
-                                cols="50"
-                                v-model="responses[question.id]"
-                                class="mt-2"
-                            ></textarea>
-                            <div v-if="question.type_id === 2">
-                                <label
-                                    v-for="answer in question.answers"
-                                    :key="answer.id"
-                                >
-                                    <input
-                                        type="checkbox"
-                                        :value="answer.id"
-                                        v-model="
-                                            responses[question.id][answer.id]
-                                        "
-                                    />
-                                    {{ answer.content }}
-                                </label>
-                            </div>
-                            <div v-if="question.type_id === 3">
-                                <label
-                                    v-for="answer in question.answers"
-                                    :key="answer.id"
-                                >
-                                    <input
-                                        type="radio"
-                                        :value="answer.id"
-                                        v-model="responses[question.id]"
-                                    />
-                                    {{ answer.content }}
-                                </label>
-                            </div>
-                            <!-- Espace pour le commentaire -->
-                            <textarea
-                                v-if="question.have_a_comment"
-                                rows="2"
-                                cols="50"
-                                v-model="comments[question.id]"
-                                placeholder="Commentaire"
-                                class="mt-2"
-                            ></textarea>
+    <div>
+        <h1>Formulaire</h1>
+
+        <form @submit.prevent="submitForm">
+            <div v-if="questionsLoaded">
+                <div v-if="questions && questions.length > 0">
+                    <div
+                        v-for="question in questions"
+                        :key="question.id"
+                        class="mb-4"
+                    >
+                        <p class="font-semibold">{{ question.content }}</p>
+                        <textarea
+                            v-if="question.type_id === 1"
+                            v-model="responses[question.id]"
+                            rows="4"
+                            cols="50"
+                            class="mt-2"
+                        ></textarea>
+                        <div v-if="question.type_id === 2">
+                            <label
+                                v-for="answer in question.answers"
+                                :key="answer.id"
+                            >
+                                <input
+                                    type="checkbox"
+                                    :value="answer.id"
+                                    v-model="responses[question.id][answer.id]"
+                                />
+                                {{ answer.content }}
+                            </label>
                         </div>
-                    </div>
-                    <div v-else>
-                        <p>Aucune question disponible.</p>
+                        <div v-if="question.type_id === 3">
+                            <label
+                                v-for="answer in question.answers"
+                                :key="answer.id"
+                            >
+                                <input
+                                    type="radio"
+                                    :value="answer.id"
+                                    v-model="responses[question.id]"
+                                />
+                                {{ answer.content }}
+                            </label>
+                        </div>
+                        <textarea
+                            v-if="question.have_a_comment"
+                            v-model="comments[question.id]"
+                            rows="2"
+                            cols="50"
+                            placeholder="Commentaire"
+                            class="mt-2"
+                        ></textarea>
+
+                        <!-- Ajoute les champs hidden pour registered_id et question_id -->
                     </div>
                 </div>
                 <div v-else>
-                    <p>Chargement des questions...</p>
-                </div>
-                <div class="mt-6">
-                    <button
-                        @click="submitForm"
-                        class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                    >
-                        Envoyer
-                    </button>
+                    <p>Aucune question disponible.</p>
                 </div>
             </div>
-        </div>
+            <div v-else>
+                <p>Chargement des questions...</p>
+            </div>
+            <div class="mt-6">
+                <button
+                    type="submit"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                >
+                    Envoyer
+                </button>
+            </div>
+        </form>
     </div>
 </template>
 
 <script setup>
 import { defineProps, ref, onMounted } from "vue";
+import { useForm } from "@inertiajs/vue3";
 
-const props = defineProps(["questions", "answers"]);
+const props = defineProps(["questions", "registeredToken"]);
+
+const form = useForm({
+    responses: {},
+    comments: {},
+});
 
 const questionsLoaded = ref(false);
 const responses = ref({});
 const comments = ref({});
+const registeredId = ref(props.registeredToken.id); // Enregistre le registered_id dans une référence
 
 onMounted(() => {
     if (props.questions && props.questions.length > 0) {
@@ -105,7 +108,18 @@ onMounted(() => {
 });
 
 const submitForm = () => {
-    console.log("Réponses :", responses.value);
-    console.log("Commentaires :", comments.value);
+    form.post(
+        route("formulaire.store", { token: props.registeredToken.token }),
+        {
+
+        },
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                // Affiche un message de succès si nécessaire
+                // Par exemple: toast.success('Formulaire soumis avec succès');
+            },
+        }
+    );
 };
 </script>

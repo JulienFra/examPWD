@@ -96,4 +96,6 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('/form/{id}', [FormController::class, 'show'])->name('form.show');
+
+Route::get('/formulaire/{token}', [FormController::class, 'show'])->name('formulaire.show');
+Route::post('/formulaire/{token}/store', [FormController::class, 'store'])->name('formulaire.store');
