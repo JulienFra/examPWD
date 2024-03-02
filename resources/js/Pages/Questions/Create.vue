@@ -12,16 +12,6 @@
                 ></textarea>
             </div>
 
-            <div>
-                <label>
-                    <input
-                        v-model="formCreateQuestion.haveComment"
-                        type="checkbox"
-                    />
-                    Avoir un Commentaire
-                </label>
-            </div>
-
             <button type="submit">Ajouter la Question</button>
         </form>
 
@@ -32,12 +22,10 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { Link, useForm } from "@inertiajs/vue3";
 
 const formCreateQuestion = useForm({
     content: "",
-    haveComment: false,
 });
 
 const ajouterQuestion = () => {
@@ -45,7 +33,6 @@ const ajouterQuestion = () => {
         route("questions.store"),
         {
             content: formCreateQuestion.content,
-            have_comment: formCreateQuestion.haveComment ? 1 : 0,
         },
         {
             onSuccess: () => {
