@@ -18,4 +18,8 @@ class Course extends Model
     {
         return $this->belongsTo(Teacher::class);
     }
+    public function formResponses()
+    {
+        return $this->hasMany(FormResponse::class, 'course_id');
+    }
 }
