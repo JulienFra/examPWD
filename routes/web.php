@@ -20,6 +20,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\FormResponseController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TeacherController;
 
@@ -99,3 +100,6 @@ Route::middleware([
 
 Route::get('/formulaire/{token}', [FormController::class, 'show'])->name('formulaire.show');
 Route::post('/formulaire/{token}/store', [FormController::class, 'store'])->name('formulaire.store');
+Route::get('/form-responses/{teacherToken}', [FormResponseController::class, 'index']);
+Route::get('/form-responses/{teacherToken}/courses/{courseId}', [FormResponseController::class, 'showResponses'])
+    ->name('course.responses');

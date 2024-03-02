@@ -30,8 +30,12 @@ class TeacherController extends Controller
             'name' => 'required|string',
         ]);
 
+        // Générer un token aléatoire de 10 caractères
+        $token = bin2hex(random_bytes(5));
+
         Teacher::create([
             'name' => $request->input('name'),
+            'token' => $token,
         ]);
 
         return redirect()->route('teachers.index');
