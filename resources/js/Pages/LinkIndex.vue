@@ -6,15 +6,15 @@
             <h1 class="text-3xl font-bold mb-4">Liste des Cours</h1>
 
             <ul>
-                <li v-for="course in finishedCourses" :key="course.id">
-                    {{ course.name }}
+                <li
+                    v-for="(links, courseName) in linksByCourse"
+                    :key="courseName"
+                >
+                    {{ courseName }}
                     <!-- Affiche les liens associés à ce cours -->
                     <ul>
-                        <li
-                            v-for="token in course.registeredTokens"
-                            :key="token.id"
-                        >
-                            {{ token.token }}
+                        <li v-for="token in links" :key="token.id">
+                            {{ token }}
                         </li>
                     </ul>
                 </li>
@@ -36,8 +36,5 @@
 <script setup>
 import { defineProps } from "vue";
 
-const { finishedCourses, teachers } = defineProps([
-    "finishedCourses",
-    "teachers",
-]);
+const { linksByCourse, teachers } = defineProps(["linksByCourse", "teachers"]);
 </script>
