@@ -29,6 +29,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/admin-actions', [AdminActionsController::class, 'index'])->name('admin.actions.index');
+Route::get('/admin-actions/link-index', [AdminActionsController::class, 'linkIndex'])->name('admin-actions.linkIndex');
 
 // Routes pour les étudiants
 Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
