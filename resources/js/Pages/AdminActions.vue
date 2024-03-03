@@ -63,6 +63,17 @@
                             Voir la liste des questions
                         </Link>
                     </div>
+                    <div class="mb-4">
+                        <h3 class="text-lg font-semibold mb-2">
+                            Lien à envoyer :
+                        </h3>
+                        <Link
+                            :href="route('admin-actions.linkIndex')"
+                            class="text-blue-600 hover:underline"
+                        >
+                            Voir la liste des liens a envoyer
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>
