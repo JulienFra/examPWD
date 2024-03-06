@@ -100,7 +100,7 @@ Route::middleware([
 
 
 Route::get('/formulaire/{token}', [FormController::class, 'show'])->name('formulaire.show');
-Route::post('/form-responses/store', [FormResponseController::class, 'store'])->name('formulaire.store');
+Route::post('/formulaire/store', [FormResponseController::class, 'store'])->name('formulaire.store');
 Route::get('/form-responses/{teacherToken}', [FormResponseController::class, 'index']);
 Route::get('/form-responses/{teacherToken}/courses/{courseId}', [FormResponseController::class, 'showResponses'])
     ->name('course.responses');

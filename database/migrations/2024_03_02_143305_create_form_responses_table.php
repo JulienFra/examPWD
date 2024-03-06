@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('form_responses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('registered_id');
             $table->unsignedBigInteger('question_id');
+            $table->unsignedBigInteger('student_course_id');
             $table->text('response')->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();
 
-            $table->foreign('registered_id')->references('id')->on('registered')->onDelete('cascade');
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
+            $table->foreign('student_course_id')->references('id')->on('student_courses')->onDelete('cascade');
+
         });
     }
 

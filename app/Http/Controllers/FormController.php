@@ -7,7 +7,7 @@ use App\Models\FormResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Question;
-use App\Models\StudentCourse; // Importez le modèle StudentCourse
+use App\Models\StudentCourse;
 
 class FormController extends Controller
 {
@@ -33,7 +33,7 @@ class FormController extends Controller
             ]);
         } else {
             // Redirige ou affiche un message d'erreur si le token est invalide, expiré, ou déjà utilisé
-            return redirect()->route('accueil')->with('error', 'Token invalide, expiré, ou déjà utilisé.');
+            return redirect()->route('home')->with('error', 'Token invalide, expiré, ou déjà utilisé.');
         }
     }
 }

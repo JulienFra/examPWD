@@ -46,27 +46,36 @@ class FormResponseController extends Controller
 
     
     public function store(Request $request)
-    {
-        // Récupérer les réponses et les commentaires envoyés depuis le frontend
-        $response = $request->input('response'); // Changement ici
-        $comment = $request->input('comment'); // Changement ici
-        
-        // Enregistrer chaque réponse dans la table FormResponse
-        foreach ($response as $questionId => $responseData) {
-            // Vérifie si la réponse existe pour cette question
-            if (isset($responseData)) {
-                // Créez un nouveau modèle FormResponse
-                $formResponse = new FormResponse();
-                $formResponse->question_id = $questionId;
-                $formResponse->response = $responseData;
-                $formResponse->comment = $comment[$questionId] ?? null; // Le commentaire peut être facultatif
-                $formResponse->save();
-            }
-        }
+{
+    // Validation des données
+    $validatedData = $request->validate([
+        'response' => 'required|array',
+        'comment' => 'array',
+        'student_course_id' => 'required|exists:student_courses,id',
+    ]);
 
-        // Répondre avec succès en renvoyant une réponse JSON
-        return response()->json(['message' => 'Formulaire soumis avec succès.']);
+    // Crée une nouvelle réponse de formulaire
+    $formResponse = FormResponse::create([
+        'student_course_id' => $validatedData['student_course_id'],
+        // Autres champs que vous souhaitez enregistrer
+    ]);
+
+    // Enregistre chaque réponse dans la base de données avec la relation
+    foreach ($validatedData['response'] as $questionId => $response) {
+        $formResponse->answers()->create([
+            'question_id' => $questionId,
+            'response' => $response,
+            'comment' => $validatedData['comment'][$questionId] ?? null,
+        ]);
     }
+
+    dd($validatedData);
+
+    // Redirige avec un message de succès
+    return redirect()->route('home')->with('success', 'Réponses enregistrées avec succès.');
+}
+
+
 
     
 

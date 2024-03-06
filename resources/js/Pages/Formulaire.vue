@@ -20,7 +20,7 @@
                           </label>
                       </div>
                       <textarea v-if="question.have_a_comment" v-model="comments[question.id]" rows="2" cols="50" placeholder="Commentaire" class="mt-2"></textarea>
-                      <input type="hidden" :value="question.id">
+                      <input type="hidden" name="question_id[]" :value="question.id">
                   </div>
               </div>
               <div v-else>
@@ -30,6 +30,8 @@
           <div v-else>
               <p>Chargement des questions...</p>
           </div>
+          <!-- Ajout du champ student_course_id -->
+          <input type="hidden" name="student_course_id" :value="studentCourse.id">
           <div class="mt-6">
               <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Envoyer</button>
           </div>
@@ -41,7 +43,7 @@
 import { defineProps, ref, onMounted } from "vue";
 import { useForm } from "@inertiajs/vue3";
 
-const props = defineProps(["questions"]);
+const props = defineProps(["questions", "studentCourse"]);
 
 const form = useForm({
   response: {},
@@ -86,4 +88,3 @@ const submitForm = () => {
 };
 
 </script>
-
