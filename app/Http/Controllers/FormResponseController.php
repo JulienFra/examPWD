@@ -7,9 +7,11 @@ use App\Models\Question;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\StudentCourse;
 
 class FormResponseController extends Controller
 {
+
     public function index($teacherToken)
     {
         $teacher = Teacher::where('token', $teacherToken)->firstOrFail();
@@ -41,4 +43,42 @@ class FormResponseController extends Controller
             'responses' => $responses,
         ]);
     }
+
+    
+    public function store(Request $request)
+{
+    // Validation des données
+    $validatedData = $request->validate([
+        'response' => 'required|array',
+        'comment' => 'array',
+        'student_course_id' => 'required|exists:student_courses,id',
+    ]);
+
+    // Crée une nouvelle réponse de formulaire
+    $formResponse = FormResponse::create([
+        'student_course_id' => $validatedData['student_course_id'],
+        // Autres champs que vous souhaitez enregistrer
+    ]);
+
+    // Enregistre chaque réponse dans la base de données avec la relation
+    foreach ($validatedData['response'] as $questionId => $response) {
+        $formResponse->answers()->create([
+            'question_id' => $questionId,
+            'response' => $response,
+            'comment' => $validatedData['comment'][$questionId] ?? null,
+        ]);
+    }
+
+    dd($validatedData);
+
+    // Redirige avec un message de succès
+    return redirect()->route('home')->with('success', 'Réponses enregistrées avec succès.');
 }
+
+
+
+    
+
+}
+
+

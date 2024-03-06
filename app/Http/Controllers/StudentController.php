@@ -83,7 +83,7 @@ class StudentController extends Controller
             $query->whereIn('section_id', $selectedSections);
         })->get();
 
-        $student->courses()->detach($removedCourses);
+        $student->courses()->detach($removedCourses);   
 
         return redirect()->route('students.show', $student->id);
     }
@@ -110,6 +110,7 @@ class StudentController extends Controller
         // Fusionnez les cours spécifiques à l'élève avec les cours des sections
         $courses = $studentCourses->merge($sectionCourses);
 
+
         return inertia('Students/EditCourse', [
             'student' => $student,
             'courses' => $courses,
@@ -127,6 +128,16 @@ class StudentController extends Controller
         ]);
 
         $student = Student::findOrFail($studentId);
+
+        // Associer un token unique à chaque cours sélectionné pour l'étudiant
+        foreach ($request->selectedCourses as $courseId) {
+        // Générer un nouveau token unique pour chaque cours
+        $token = bin2hex(random_bytes(5));
+
+        // Synchroniser le cours sélectionné pour l'étudiant
+        $student->courses()->syncWithoutDetaching([$courseId => ['token' => $token]]);
+        }
+
         $student->courses()->sync($request->selectedCourses);
 
         return redirect()->route('students.show', $student->id);
