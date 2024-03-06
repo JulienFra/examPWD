@@ -45,22 +45,31 @@ class FormResponseController extends Controller
     }
 
     
-   public function store(Request $request)
-   {
-       // Récupérer les réponses et les commentaires envoyés depuis le frontend
-       $responses = $request->input('responses');
-       $comments = $request->input('comments');
+    public function store(Request $request)
+    {
+        // Récupérer les réponses et les commentaires envoyés depuis le frontend
+        $response = $request->input('response'); // Changement ici
+        $comment = $request->input('comment'); // Changement ici
+        
+        // Enregistrer chaque réponse dans la table FormResponse
+        foreach ($response as $questionId => $responseData) {
+            // Vérifie si la réponse existe pour cette question
+            if (isset($responseData)) {
+                // Créez un nouveau modèle FormResponse
+                $formResponse = new FormResponse();
+                $formResponse->question_id = $questionId;
+                $formResponse->response = $responseData;
+                $formResponse->comment = $comment[$questionId] ?? null; // Le commentaire peut être facultatif
+                $formResponse->save();
+            }
+        }
 
-       // Enregistrer chaque réponse dans la table FormResponse
-       foreach ($responses as $questionId => $response) {
-           FormResponse::create([
-               'question_id' => $questionId,
-               'response' => $response,
-               'comment' => $comments[$questionId] ?? null,
-           ]);
-       }
+        // Répondre avec succès en renvoyant une réponse JSON
+        return response()->json(['message' => 'Formulaire soumis avec succès.']);
+    }
 
-       // Répondre avec succès
-       return response()->json(['message' => 'Form submitted successfully']);
-   }
+    
+
 }
+
+

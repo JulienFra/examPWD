@@ -1,59 +1,25 @@
 <template>
   <div>
       <h1>Formulaire</h1>
-      
-
       <form @submit.prevent="submitForm">
           <div v-if="questionsLoaded">
               <div v-if="questions && questions.length > 0">
-                  <div
-                      v-for="question in questions"
-                      :key="question.id"
-                      class="mb-4"
-                  >
+                  <div v-for="question in questions" :key="question.id" class="mb-4">
                       <p class="font-semibold">{{ question.content }}</p>
-                      <textarea
-                          v-if="question.type_id === 1"
-                          v-model="responses[question.id]"
-                          rows="4"
-                          cols="50"
-                          class="mt-2"
-                      ></textarea>
+                      <textarea v-if="question.type_id === 1" v-model="responses[question.id]" rows="4" cols="50" class="mt-2"></textarea>
                       <div v-if="question.type_id === 2">
-                          <label
-                              v-for="answer in question.answers"
-                              :key="answer.id"
-                          >
-                              <input
-                                  type="checkbox"
-                                  :value="answer.id"
-                                  v-model="responses[question.id]"
-                              />
+                          <label v-for="answer in question.answers" :key="answer.id">
+                              <input type="checkbox" :value="answer.id" v-model="responses[question.id]">
                               {{ answer.content }}
                           </label>
                       </div>
                       <div v-if="question.type_id === 3">
-                          <label
-                              v-for="answer in question.answers"
-                              :key="answer.id"
-                          >
-                              <input
-                                  type="radio"
-                                  :value="answer.id"
-                                  v-model="responses[question.id]"
-                              />
+                          <label v-for="answer in question.answers" :key="answer.id">
+                              <input type="radio" :value="answer.id" v-model="responses[question.id]">
                               {{ answer.content }}
                           </label>
                       </div>
-                      <textarea
-                          v-if="question.have_a_comment"
-                          v-model="comments[question.id]"
-                          rows="2"
-                          cols="50"
-                          placeholder="Commentaire"
-                          class="mt-2"
-                      ></textarea>
-
+                      <textarea v-if="question.have_a_comment" v-model="comments[question.id]" rows="2" cols="50" placeholder="Commentaire" class="mt-2"></textarea>
                       <input type="hidden" :value="question.id">
                   </div>
               </div>
@@ -65,12 +31,7 @@
               <p>Chargement des questions...</p>
           </div>
           <div class="mt-6">
-              <button
-                  type="submit"
-                  class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-              >
-                  Envoyer
-              </button>
+              <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Envoyer</button>
           </div>
       </form>
   </div>
@@ -83,8 +44,8 @@ import { useForm } from "@inertiajs/vue3";
 const props = defineProps(["questions"]);
 
 const form = useForm({
-  responses: {},
-  comments: {},
+  response: {},
+  comment: {},
 });
 
 const questionsLoaded = ref(false);
@@ -108,11 +69,11 @@ onMounted(() => {
 });
 
 const submitForm = () => {
-    form.post(
+    form.post(  
         route("formulaire.store"), 
         {
-            responses: responses.value,
-            comments: comments.value,
+            response: responses.value,
+            comment: comments.value,
         },
         {
             preserveScroll: true,
