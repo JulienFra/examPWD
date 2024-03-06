@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('token')->unique();
             $table->unsignedBigInteger('course_id');
-            $table->boolean('is_used')->default(false); // Nouvelle colonne pour indiquer si le token a été utilisé
+            $table->unsignedBigInteger('student_id');
+            $table->boolean('is_used')->default(false);
             $table->timestamps();
 
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
         });
     }
 

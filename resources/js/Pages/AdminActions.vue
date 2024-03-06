@@ -1,5 +1,3 @@
-<!-- resources/js/Pages/AdminActions.vue -->
-
 <template>
     <AppLayout title="Actions Administratives">
         <template #header>
@@ -71,7 +69,7 @@
                             :href="route('admin-actions.linkIndex')"
                             class="text-blue-600 hover:underline"
                         >
-                            Voir la liste des liens a envoyer
+                            Voir la liste des liens à envoyer
                         </Link>
                     </div>
                 </div>

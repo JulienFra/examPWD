@@ -7,9 +7,11 @@ use App\Models\Question;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\StudentCourse;
 
 class FormResponseController extends Controller
 {
+
     public function index($teacherToken)
     {
         $teacher = Teacher::where('token', $teacherToken)->firstOrFail();
@@ -41,4 +43,24 @@ class FormResponseController extends Controller
             'responses' => $responses,
         ]);
     }
+
+    
+   public function store(Request $request)
+   {
+       // Récupérer les réponses et les commentaires envoyés depuis le frontend
+       $responses = $request->input('responses');
+       $comments = $request->input('comments');
+
+       // Enregistrer chaque réponse dans la table FormResponse
+       foreach ($responses as $questionId => $response) {
+           FormResponse::create([
+               'question_id' => $questionId,
+               'response' => $response,
+               'comment' => $comments[$questionId] ?? null,
+           ]);
+       }
+
+       // Répondre avec succès
+       return response()->json(['message' => 'Form submitted successfully']);
+   }
 }
