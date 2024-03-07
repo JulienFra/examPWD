@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FormResponse;
 use App\Models\Question;
 use App\Models\Teacher;
+use App\Models\Form;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\StudentCourse;
@@ -49,8 +50,7 @@ class FormResponseController extends Controller
 {
     // Récupération des données de la requête
     $requestData = $request->all();
-    dd($requestData);
-
+    
     // Crée une nouvelle réponse de formulaire
     $formResponse = FormResponse::create([
         'student_course_id' => $requestData['student_course_id'],
@@ -58,9 +58,9 @@ class FormResponseController extends Controller
 
     // Enregistre chaque réponse dans la base de données
     foreach ($requestData['responses'] as $questionId => $responses) {
-
         if (is_array($responses)) {
             foreach ($responses as $response) {
+                // Stocke l'ID de la question dans la variable $formResponse
                 $formResponse->answers()->create([
                     'question_id' => $questionId,
                     'response' => $response,
@@ -68,6 +68,7 @@ class FormResponseController extends Controller
                 ]);
             }
         } else {
+            // Stocke l'ID de la question dans la variable $formResponse
             $formResponse->answers()->create([
                 'question_id' => $questionId,
                 'response' => $responses,
@@ -79,6 +80,7 @@ class FormResponseController extends Controller
     // Redirige avec un message de succès
     return redirect()->route('home')->with('success', 'Réponses enregistrées avec succès.');
 }
+
 
 }
 
