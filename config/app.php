@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
+
     ])->toArray(),
 
     /*
@@ -186,5 +187,11 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
+
+    'openai' => [
+        'base_url' => env('OPENAI_BASE_URL'),
+        'api_key' => env('OPENAI_API_KEY'),
+    ],
+
 
 ];

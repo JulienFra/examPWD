@@ -8,9 +8,17 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Question;
 use App\Models\StudentCourse;
+use App\Services\OpenAIService;
 
 class FormController extends Controller
 {
+    protected $openaiService;
+
+    public function __construct(OpenAIService $openaiService)
+    {
+        $this->openaiService = $openaiService;
+    }
+
     public function show($token)
     {
         // Trouve le token dans la table "student_courses"
@@ -35,5 +43,17 @@ class FormController extends Controller
             // Redirige ou affiche un message d'erreur si le token est invalide, expiré, ou déjà utilisé
             return redirect()->route('home')->with('error', 'Token invalide, expiré, ou déjà utilisé.');
         }
+    }
+
+    public function store(Request $request)
+    {
+        // Valider et enregistrer les données du formulaire
+
+        // Paraphraser la réponse ouverte de l'élève
+        $paraphrasedResponse = $this->openaiService->paraphrase($request->input('open_response'));
+
+        // Enregistrer la réponse paraphrasée dans la base de données
+
+        // Rediriger ou afficher un message de confirmation
     }
 }

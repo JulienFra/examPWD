@@ -114,6 +114,9 @@ Route::get('/test-paraphrase', function () {
     $textToParaphrase = "Ceci est un test de paraphrase.";
     $paraphrasedText = $openaiService->paraphrase($textToParaphrase);
 
-    // Affichez le résultat de la paraphrase
-    dd($paraphrasedText);
+    // Convertir le tableau multidimensionnel en une chaîne JSON
+    $paraphrasedTextJson = json_encode($paraphrasedText);
+
+    // Afficher le résultat de la paraphrase
+    dd($paraphrasedTextJson);
 });
