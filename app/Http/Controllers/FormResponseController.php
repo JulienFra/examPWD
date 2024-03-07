@@ -47,11 +47,12 @@ class FormResponseController extends Controller
     
     public function store(Request $request)
 {
+
+    dd($request->all());
     // Validation des données
     $validatedData = $request->validate([
-        'responses.*' => 'required|array',
-        'responses.*.*' => 'nullable|integer',
-        'comments.*' => 'nullable|string',
+        'responses' => 'required|array',
+        'comments' => 'array',
         'student_course_id' => 'required|exists:student_courses,id',
     ]);
 
@@ -62,29 +63,16 @@ class FormResponseController extends Controller
 
     // Enregistre chaque réponse dans la base de données
     foreach ($validatedData['responses'] as $questionId => $responses) {
-        // Si la réponse est un tableau (cas des cases à cocher)
-        if (is_array($responses)) {
-            foreach ($responses as $response) {
-                $formResponse->answers()->create([
-                    'question_id' => $questionId,
-                    'response' => $response,
-                    'comment' => $validatedData['comments'][$questionId] ?? null,
-                ]);
-            }
-        } else {
-            // Si la réponse est une chaîne (cas des champs de texte)
-            $formResponse->answers()->create([
-                'question_id' => $questionId,
-                'response' => $responses,
-                'comment' => $validatedData['comments'][$questionId] ?? null,
-            ]);
-        }
+        $formResponse->answers()->create([
+            'question_id' => $questionId,
+            'responses' => $responses,
+            'comments' => $validatedData['comments'][$questionId] ?? null,
+        ]);
     }
 
     // Redirige avec un message de succès
     return redirect()->route('home')->with('success', 'Réponses enregistrées avec succès.');
 }
-
     
 
 }
