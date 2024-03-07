@@ -10,14 +10,28 @@
                         class="mb-4"
                     >
                         <p class="font-semibold">{{ question.content }}</p>
-                        <textarea
-                            v-if="question.type_id === 1"
-                            v-model="responses[question.id]"
-                            rows="4"
-                            cols="50"
-                            class="mt-2"
-                        ></textarea>
-                        <div v-if="question.type_id === 2">
+                        <div v-if="question.type_id === 1">
+                            <textarea
+                                v-model="responses[question.id]"
+                                rows="4"
+                                cols="50"
+                                class="mt-2"
+                            ></textarea>
+                            <button
+                                @click="paraphraseQuestion(question.id)"
+                                class="mt-2"
+                            >
+                                Paraphraser
+                            </button>
+                            <p
+                                v-if="paraphrasedResponses[question.id]"
+                                class="italic"
+                            >
+                                Paraphrased:
+                                {{ paraphrasedResponses[question.id] }}
+                            </p>
+                        </div>
+                        <div v-else-if="question.type_id === 2">
                             <label
                                 v-for="answer in question.answers"
                                 :key="answer.id"
@@ -30,7 +44,7 @@
                                 {{ answer.content }}
                             </label>
                         </div>
-                        <div v-if="question.type_id === 3">
+                        <div v-else-if="question.type_id === 3">
                             <label
                                 v-for="answer in question.answers"
                                 :key="answer.id"
@@ -86,6 +100,7 @@
 <script setup>
 import { defineProps, ref, onMounted } from "vue";
 import { useForm } from "@inertiajs/vue3";
+import axios from "axios";
 
 const props = defineProps(["questions", "studentCourse"]);
 
@@ -97,6 +112,7 @@ const form = useForm({
 const questionsLoaded = ref(false);
 const responses = ref({});
 const comments = ref({});
+const paraphrasedResponses = ref({});
 
 onMounted(() => {
     if (props.questions && props.questions.length > 0) {
@@ -108,6 +124,7 @@ onMounted(() => {
                 responses.value[question.id] = "";
             }
             comments.value[question.id] = "";
+            paraphrasedResponses.value[question.id] = "";
         });
     } else {
         console.error("Aucune question transmise depuis le contrôleur.");
@@ -129,5 +146,19 @@ const submitForm = () => {
             },
         }
     );
+};
+
+const paraphraseQuestion = async (questionId) => {
+    try {
+        const response = await axios.post(route("paraphrase.route"), {
+            text: responses.value[questionId],
+        });
+        paraphrasedResponses.value[questionId] = response.data.paraphrase;
+    } catch (error) {
+        console.error(
+            "Erreur lors de la paraphrase de la question ouverte",
+            error
+        );
+    }
 };
 </script>
