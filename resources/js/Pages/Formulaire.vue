@@ -29,8 +29,8 @@
   
   function submit() {
     router.post(route('formulaire.store'), {
-        responses: responses.value,
-        comments: comments.value,
+        response: responses.value,
+        comment: comments.value,
         student_course_id: props.studentCourse.id
     });
 }

@@ -48,9 +48,8 @@ class FormResponseController extends Controller
     public function store(Request $request)
 {
     dd($request->all());
-    
+
     try {
-        // Validation des données
         $validatedData = $request->validate([
             'responses' => 'array',
             'responses.*' => 'array',
@@ -61,19 +60,13 @@ class FormResponseController extends Controller
         ]);
 
     } catch (\Illuminate\Validation\ValidationException $e) {
-        // Gérer les erreurs de validation
         return back()->withErrors($e->errors())->withInput();
     }
 
-    // Si la validation passe, vous pouvez continuer avec le reste du code
-    // ...
-
-    // Crée une nouvelle réponse de formulaire
     $formResponse = FormResponse::create([
         'student_course_id' => $validatedData['student_course_id'],
     ]);
 
-    // Enregistre chaque réponse dans la base de données
     foreach ($validatedData['responses'] as $questionId => $responses) {
         if (is_array($responses)) {
             foreach ($responses as $response) {
