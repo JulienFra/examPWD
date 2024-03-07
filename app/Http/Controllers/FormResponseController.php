@@ -53,18 +53,32 @@ class FormResponseController extends Controller
 
     // Enregistre chaque réponse dans la base de données
     foreach ($requestData['question_ids'] as $questionId) {
-        // Crée une nouvelle réponse associée à la question dans le formulaire
-        $formResponse = new FormResponse();
-        $formResponse->student_course_id = $requestData['student_course_id'];
-        $formResponse->question_id = $questionId;
-        $formResponse->response = $requestData['response'][$questionId] ?? null;
-        $formResponse->comment = $requestData['comments'][$questionId] ?? null;
-        $formResponse->save();
+        // Vérifie si la réponse est un tableau (cas des checkbox)
+        if (is_array($requestData['response'][$questionId])) {
+            // Enregistre chaque réponse de type checkbox dans une ligne différente
+            foreach ($requestData['response'][$questionId] as $response) {
+                $formResponse = new FormResponse();
+                $formResponse->student_course_id = $requestData['student_course_id'];
+                $formResponse->question_id = $questionId;
+                $formResponse->response = $response;
+                $formResponse->comment = $requestData['comment'][$questionId] ?? null;
+                $formResponse->save();
+            }
+        } else {
+            // Pour les autres types de réponses, enregistre simplement la réponse
+            $formResponse = new FormResponse();
+            $formResponse->student_course_id = $requestData['student_course_id'];
+            $formResponse->question_id = $questionId;
+            $formResponse->response = $requestData['response'][$questionId] ?? null;
+            $formResponse->comment = $requestData['comment'][$questionId] ?? null;
+            $formResponse->save();
+        }
     }
 
     // Redirige avec un message de succès
     return redirect()->route('home')->with('success', 'Réponses enregistrées avec succès.');
 }
+
 
 
 
