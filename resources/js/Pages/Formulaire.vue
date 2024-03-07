@@ -28,8 +28,13 @@
   });
   
   function submit() {
-  router.post('store', form)
-    }
+    router.post(route('formulaire.store'), {
+        responses: responses.value,
+        comments: comments.value,
+        student_course_id: props.studentCourse.id
+    });
+}
+
   </script>
 
 <template>
