@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 class Registered extends Model
 {
     use HasFactory;
+    protected $table = 'registered';
 
     protected $fillable = [
         'token',
-        'student_id',
         'course_id',
     ];
 

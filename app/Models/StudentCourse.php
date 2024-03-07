@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudentCourse extends Model
 {
-    protected $fillable = ['student_id', 'course_id'];
+    protected $fillable = ['student_id', 'course_id',  'token'];
 
     public function student()
     {
@@ -16,6 +16,11 @@ class StudentCourse extends Model
     }
 
     public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+
+    public function token()
     {
         return $this->belongsTo(Course::class);
     }

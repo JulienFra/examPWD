@@ -32,6 +32,7 @@
             >
                 Modifier la question
             </Link>
+            <div class="mt-4"></div> <!-- Espacement ajouté -->
             <!-- Bouton de modification -->
             <Link
                 :href="route('questions.editType', { id: question.id })"
@@ -39,6 +40,7 @@
             >
                 Modifier le type
             </Link>
+            <div class="mt-4"></div> <!-- Espacement ajouté -->
             <div v-if="question.type_id !== 1" class="mt-4">
                 <Link
                     :href="route('questions.editReponses', { id: question.id })"
@@ -47,6 +49,7 @@
                     Modifier les réponses
                 </Link>
             </div>
+            <div class="mt-4"></div> <!-- Espacement ajouté -->
             <!-- Bouton de retour à la liste des questions -->
             <Link
                 :href="route('questions.index')"

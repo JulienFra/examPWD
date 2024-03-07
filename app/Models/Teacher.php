@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Teacher extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+        'token',
+    ];
 
     public function courses()
     {

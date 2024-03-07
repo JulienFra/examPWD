@@ -20,6 +20,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\FormResponseController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TeacherController;
 
@@ -28,6 +29,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/admin-actions', [AdminActionsController::class, 'index'])->name('admin.actions.index');
+Route::get('/admin-actions/link-index', [AdminActionsController::class, 'linkIndex'])->name('admin-actions.linkIndex');
 
 // Routes pour les étudiants
 Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
@@ -96,4 +98,9 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::get('/form/{id}', [FormController::class, 'show'])->name('form.show');
+
+Route::get('/formulaire/{token}', [FormController::class, 'show'])->name('formulaire.show');
+Route::post('/formulaire/store', [FormResponseController::class, 'store'])->name('formulaire.store');
+Route::get('/form-responses/{teacherToken}', [FormResponseController::class, 'index']);
+Route::get('/form-responses/{teacherToken}/courses/{courseId}', [FormResponseController::class, 'showResponses'])
+    ->name('course.responses');

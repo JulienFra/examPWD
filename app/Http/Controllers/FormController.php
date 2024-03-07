@@ -3,16 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\FormResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Question;
 use GuzzleHttp\Client;
+use App\Models\StudentCourse;
 
 class FormController extends Controller
 {
-    public function show($id)
+    public function show($token)
     {
-        $question = Question::with(['type', 'answers'])->where('is_deleted', '!=', 1)->findOrFail($id);
+        // Trouve le token dans la table "student_courses"
+        $studentCourse = StudentCourse::where('token', $token)->where('is_used', false)->first();
+
+        // Vérifie si le token existe et n'a pas expiré
+        if ($studentCourse) {
+            // Marque le token comme utilisé
+            $studentCourse->update(['is_used' => true]);
+
+            // Récupère la question spécifique avec son type et ses réponses associées
+            $question = Question::with(['type', 'answers'])->where('is_deleted', '!=', 1)->findOrFail($studentCourse->course_id);
 
         return Inertia::render('Formulaire', [
             'question' => $question,
@@ -53,5 +64,7 @@ class FormController extends Controller
         ]);
 
         return json_decode($response->getBody(), true);
+
     }
 }
+
