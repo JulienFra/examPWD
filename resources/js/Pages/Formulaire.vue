@@ -37,7 +37,6 @@
         question_ids: form.questionIds,
     });
 }
-
   </script>
 
 <template>

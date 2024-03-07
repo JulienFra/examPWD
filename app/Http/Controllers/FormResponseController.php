@@ -50,36 +50,26 @@ class FormResponseController extends Controller
 {
     // Récupération des données de la requête
     $requestData = $request->all();
-    
-    // Crée une nouvelle réponse de formulaire
-    $formResponse = FormResponse::create([
-        'student_course_id' => $requestData['student_course_id'],
-    ]);
+
 
     // Enregistre chaque réponse dans la base de données
-    foreach ($requestData['responses'] as $questionId => $responses) {
-        if (is_array($responses)) {
-            foreach ($responses as $response) {
-                // Stocke l'ID de la question dans la variable $formResponse
-                $formResponse->answers()->create([
-                    'question_id' => $questionId,
-                    'response' => $response,
-                    'comment' => $requestData['comments'][$questionId] ?? null,
-                ]);
-            }
-        } else {
-            // Stocke l'ID de la question dans la variable $formResponse
-            $formResponse->answers()->create([
-                'question_id' => $questionId,
-                'response' => $responses,
-                'comment' => $requestData['comments'][$questionId] ?? null,
-            ]);
-        }
+    foreach ($requestData['response'] as $questionId => $response) {
+        // Affiche les valeurs pour débogage
+
+        // Crée une nouvelle réponse associée à la question dans la réponse de formulaire
+        $formResponse = FormResponse::create([
+            'student_course_id' => $requestData['student_course_id'],
+            'question_id' => $questionId,
+            'response' => $response,
+            'comment' => $requestData['comments'][$questionId] ?? null,
+        ]);
     }
 
     // Redirige avec un message de succès
     return redirect()->route('home')->with('success', 'Réponses enregistrées avec succès.');
 }
+
+
 
 
 }
