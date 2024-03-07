@@ -6,6 +6,7 @@
   const form = reactive({
     response: {},
     comment: {},
+    questionIds: [],
   });
   const questionsLoaded = ref(false);
   const responses = ref({});
@@ -21,6 +22,7 @@
           responses.value[question.id] = "";
         }
         comments.value[question.id] = "";
+        form.questionIds.push(question.id);
       });
     } else {
       console.error("Aucune question transmise depuis le contrôleur.");
@@ -31,7 +33,8 @@
     router.post(route('formulaire.store'), {
         response: responses.value,
         comment: comments.value,
-        student_course_id: props.studentCourse.id
+        student_course_id: props.studentCourse.id,
+        question_ids: form.questionIds,
     });
 }
 
@@ -59,7 +62,7 @@
                 </label>
               </div>
               <textarea v-if="question.have_a_comment" v-model="comments[question.id]" rows="2" cols="50" placeholder="Commentaire" class="mt-2"></textarea>
-              <input type="hidden" name="question_id[]" :value="question.id">
+              <input type="hidden" name="question_ids[]" :value="question.id">
             </div>
           </div>
           <div v-else>

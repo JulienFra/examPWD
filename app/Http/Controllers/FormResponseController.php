@@ -47,43 +47,31 @@ class FormResponseController extends Controller
     
     public function store(Request $request)
 {
-    dd($request->all());
-    
-    try {
-        // Validation des données
-        $validatedData = $request->validate([
-            'responses' => 'required|array',
-            'responses.*' => 'nullable|array',
-            'responses.*.*' => 'nullable|integer',
-            'comments' => 'nullable|array',
-            'comments.*' => 'nullable|string',
-            'student_course_id' => 'required|exists:student_courses,id',
-        ]);
-    } catch (\Illuminate\Validation\ValidationException $e) {
-        // En cas d'échec de la validation, retournez avec les erreurs de validation et les données saisies précédemment
-        return back()->withErrors($e->errors())->withInput();
-    }
+    // Récupération des données de la requête
+    $requestData = $request->all();
+    dd($requestData);
 
     // Crée une nouvelle réponse de formulaire
     $formResponse = FormResponse::create([
-        'student_course_id' => $validatedData['student_course_id'],
+        'student_course_id' => $requestData['student_course_id'],
     ]);
 
     // Enregistre chaque réponse dans la base de données
-    foreach ($validatedData['responses'] as $questionId => $responses) {
+    foreach ($requestData['responses'] as $questionId => $responses) {
+
         if (is_array($responses)) {
             foreach ($responses as $response) {
                 $formResponse->answers()->create([
                     'question_id' => $questionId,
                     'response' => $response,
-                    'comment' => $validatedData['comments'][$questionId] ?? null,
+                    'comment' => $requestData['comments'][$questionId] ?? null,
                 ]);
             }
         } else {
             $formResponse->answers()->create([
                 'question_id' => $questionId,
                 'response' => $responses,
-                'comment' => $validatedData['comments'][$questionId] ?? null,
+                'comment' => $requestData['comments'][$questionId] ?? null,
             ]);
         }
     }
@@ -91,10 +79,6 @@ class FormResponseController extends Controller
     // Redirige avec un message de succès
     return redirect()->route('home')->with('success', 'Réponses enregistrées avec succès.');
 }
-
-
-
-
 
 }
 
