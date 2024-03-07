@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FormResponse;
 use App\Models\Question;
 use App\Models\Teacher;
+use App\Models\Form;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\StudentCourse;
@@ -47,37 +48,39 @@ class FormResponseController extends Controller
     
     public function store(Request $request)
 {
-    // Validation des données
-    $validatedData = $request->validate([
-        'response' => 'required|array',
-        'comment' => 'array',
-        'student_course_id' => 'required|exists:student_courses,id',
-    ]);
-
+    // Récupération des données de la requête
+    $requestData = $request->all();
+    
     // Crée une nouvelle réponse de formulaire
     $formResponse = FormResponse::create([
-        'student_course_id' => $validatedData['student_course_id'],
-        // Autres champs que vous souhaitez enregistrer
+        'student_course_id' => $requestData['student_course_id'],
     ]);
 
-    // Enregistre chaque réponse dans la base de données avec la relation
-    foreach ($validatedData['response'] as $questionId => $response) {
-        $formResponse->answers()->create([
-            'question_id' => $questionId,
-            'response' => $response,
-            'comment' => $validatedData['comment'][$questionId] ?? null,
-        ]);
+    // Enregistre chaque réponse dans la base de données
+    foreach ($requestData['responses'] as $questionId => $responses) {
+        if (is_array($responses)) {
+            foreach ($responses as $response) {
+                // Stocke l'ID de la question dans la variable $formResponse
+                $formResponse->answers()->create([
+                    'question_id' => $questionId,
+                    'response' => $response,
+                    'comment' => $requestData['comments'][$questionId] ?? null,
+                ]);
+            }
+        } else {
+            // Stocke l'ID de la question dans la variable $formResponse
+            $formResponse->answers()->create([
+                'question_id' => $questionId,
+                'response' => $responses,
+                'comment' => $requestData['comments'][$questionId] ?? null,
+            ]);
+        }
     }
-
-    dd($validatedData);
 
     // Redirige avec un message de succès
     return redirect()->route('home')->with('success', 'Réponses enregistrées avec succès.');
 }
 
-
-
-    
 
 }
 
