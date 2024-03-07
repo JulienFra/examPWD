@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -104,3 +105,15 @@ Route::post('/formulaire/store', [FormResponseController::class, 'store'])->name
 Route::get('/form-responses/{teacherToken}', [FormResponseController::class, 'index']);
 Route::get('/form-responses/{teacherToken}/courses/{courseId}', [FormResponseController::class, 'showResponses'])
     ->name('course.responses');
+
+
+
+// route vers la fonction de paraphrase
+Route::get('/test-paraphrase', function () {
+    $openaiService = app(\App\Services\OpenAIService::class);
+    $textToParaphrase = "Ceci est un test de paraphrase.";
+    $paraphrasedText = $openaiService->paraphrase($textToParaphrase);
+
+    // Affichez le résultat de la paraphrase
+    dd($paraphrasedText);
+});
