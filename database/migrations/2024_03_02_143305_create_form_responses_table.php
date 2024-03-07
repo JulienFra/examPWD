@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('form_responses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('question_id');
-            $table->unsignedBigInteger('student_course_id');
+            $table->unsignedBigInteger('question_id')->nullable();
+            $table->unsignedBigInteger('student_course_id')->nullable();;
             $table->text('response')->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();
