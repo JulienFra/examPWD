@@ -51,23 +51,21 @@ class FormResponseController extends Controller
     // Récupération des données de la requête
     $requestData = $request->all();
 
-
     // Enregistre chaque réponse dans la base de données
-    foreach ($requestData['response'] as $questionId => $response) {
-        // Affiche les valeurs pour débogage
-
-        // Crée une nouvelle réponse associée à la question dans la réponse de formulaire
-        $formResponse = FormResponse::create([
-            'student_course_id' => $requestData['student_course_id'],
-            'question_id' => $questionId,
-            'response' => $response,
-            'comment' => $requestData['comments'][$questionId] ?? null,
-        ]);
+    foreach ($requestData['question_ids'] as $questionId) {
+        // Crée une nouvelle réponse associée à la question dans le formulaire
+        $formResponse = new FormResponse();
+        $formResponse->student_course_id = $requestData['student_course_id'];
+        $formResponse->question_id = $questionId;
+        $formResponse->response = $requestData['response'][$questionId] ?? null;
+        $formResponse->comment = $requestData['comments'][$questionId] ?? null;
+        $formResponse->save();
     }
 
     // Redirige avec un message de succès
     return redirect()->route('home')->with('success', 'Réponses enregistrées avec succès.');
 }
+
 
 
 
