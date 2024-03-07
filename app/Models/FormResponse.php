@@ -10,13 +10,7 @@ class FormResponse extends Model
 
     use HasFactory;
 
-    protected $fillable = ['registered_id', 'question_id', 'response', 'comment'];
-
-    // Ajoute les relations avec les modèles Registered et Question si nécessaire
-    public function registered()
-    {
-        return $this->belongsTo(Registered::class);
-    }
+    protected $fillable = ['student_course_id', 'question_id', 'response', 'comment'];
 
     public function question()
     {

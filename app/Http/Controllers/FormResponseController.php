@@ -49,33 +49,41 @@ class FormResponseController extends Controller
 {
     // Validation des données
     $validatedData = $request->validate([
-        'response' => 'required|array',
-        'comment' => 'array',
+        'responses.*' => 'required|array',
+        'responses.*.*' => 'nullable|integer',
+        'comments.*' => 'nullable|string',
         'student_course_id' => 'required|exists:student_courses,id',
     ]);
 
     // Crée une nouvelle réponse de formulaire
     $formResponse = FormResponse::create([
         'student_course_id' => $validatedData['student_course_id'],
-        // Autres champs que vous souhaitez enregistrer
     ]);
 
-    // Enregistre chaque réponse dans la base de données avec la relation
-    foreach ($validatedData['response'] as $questionId => $response) {
-        $formResponse->answers()->create([
-            'question_id' => $questionId,
-            'response' => $response,
-            'comment' => $validatedData['comment'][$questionId] ?? null,
-        ]);
+    // Enregistre chaque réponse dans la base de données
+    foreach ($validatedData['responses'] as $questionId => $responses) {
+        // Si la réponse est un tableau (cas des cases à cocher)
+        if (is_array($responses)) {
+            foreach ($responses as $response) {
+                $formResponse->answers()->create([
+                    'question_id' => $questionId,
+                    'response' => $response,
+                    'comment' => $validatedData['comments'][$questionId] ?? null,
+                ]);
+            }
+        } else {
+            // Si la réponse est une chaîne (cas des champs de texte)
+            $formResponse->answers()->create([
+                'question_id' => $questionId,
+                'response' => $responses,
+                'comment' => $validatedData['comments'][$questionId] ?? null,
+            ]);
+        }
     }
-
-    dd($validatedData);
 
     // Redirige avec un message de succès
     return redirect()->route('home')->with('success', 'Réponses enregistrées avec succès.');
 }
-
-
 
     
 
