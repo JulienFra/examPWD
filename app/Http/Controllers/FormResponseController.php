@@ -9,6 +9,8 @@ use App\Models\Form;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\StudentCourse;
+use Carbon\Carbon;
+use App\Models\Student;
 
 class FormResponseController extends Controller
 {
@@ -47,7 +49,7 @@ class FormResponseController extends Controller
 
     
     public function store(Request $request)
-{
+    {
     // Récupération des données de la requête
     $requestData = $request->all();
 
@@ -77,13 +79,7 @@ class FormResponseController extends Controller
 
     // Redirige avec un message de succès
     return redirect()->route('home')->with('success', 'Réponses enregistrées avec succès.');
-}
-
-
-
-
-
-
+    }
 }
 
 
