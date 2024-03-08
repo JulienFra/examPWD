@@ -30,7 +30,7 @@ class FormResponseController extends Controller
         $course = $teacher->courses()->findOrFail($courseId);
 
         // Récupère les réponses associées au cours en utilisant la relation indirecte
-        $responses = FormResponse::whereHas('registered', function ($query) use ($courseId) {
+        $responses = FormResponse::whereHas('student_course', function ($query) use ($courseId) {
             $query->where('course_id', $courseId);
         })->get();
 
