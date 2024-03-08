@@ -21,4 +21,9 @@ class FormResponse extends Model
     {
         return $this->hasMany(Answer::class);
     }
+
+    public function student_course()
+    {
+        return $this->belongsTo(StudentCourse::class);
+    }
 }

@@ -15,12 +15,10 @@
                     </h3>
                     <ul>
                         <li
-                            v-for="response in getResponsesByQuestion(
-                                question.id
-                            )"
-                            :key="response.id"
+                            v-for="(response, index) in getGroupedResponses(question.id)"
+                            :key="index"
                         >
-                            {{ response.response }}
+                            {{ response.response }} ({{ response.count }})
                             <span
                                 v-if="response.comment"
                                 class="text-gray-500 ml-2"
@@ -44,8 +42,26 @@ const { teacher, course, questions, responses } = defineProps([
     "responses",
 ]);
 
-function getResponsesByQuestion(questionId) {
-    // Filtrer les réponses par question
-    return responses.filter((response) => response.question_id === questionId);
+function getGroupedResponses(questionId) {
+    const groupedResponses = {};
+    const filteredResponses = responses.filter(
+        (response) => response.question_id === questionId
+    );
+
+    // Compter les réponses identiques
+    filteredResponses.forEach((response) => {
+        const key = response.response + (response.comment ? "|" + response.comment : "");
+        if (!groupedResponses[key]) {
+            groupedResponses[key] = {
+                response: response.response,
+                comment: response.comment,
+                count: 0,
+            };
+        }
+        groupedResponses[key].count++;
+    });
+
+    // Convertir l'objet en tableau
+    return Object.values(groupedResponses);
 }
 </script>
