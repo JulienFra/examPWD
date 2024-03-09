@@ -85,4 +85,11 @@ class CourseController extends Controller
             'teacher_id' => $request->input('teacher_id'),
         ]);
     }
+
+    public function updateEndTime($courseId)
+{
+    $course = Course::findOrFail($courseId);
+    $course->update(['end_time' => now()]); 
+}
+
 }
