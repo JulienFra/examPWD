@@ -77,6 +77,11 @@ class FormResponseController extends Controller
         }
     }
 
+        // Supprimer le token de l'étudiant une fois le formulaire terminé
+        $studentCourse = StudentCourse::findOrFail($requestData['student_course_id']);
+        $studentCourse->token = bin2hex(random_bytes(5));
+        $studentCourse->save();
+
     // Redirige avec un message de succès
     return redirect()->route('home')->with('success', 'Réponses enregistrées avec succès.');
     }

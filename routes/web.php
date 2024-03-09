@@ -23,6 +23,8 @@ use App\Http\Controllers\FormController;
 use App\Http\Controllers\FormResponseController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\TeacherController;
+use App\Mail\MyEmail;
+use App\Http\Controllers\EmailController;
 
 Route::get('/', function () {
     return redirect()->route('admin.actions.index');
@@ -104,3 +106,5 @@ Route::post('/formulaire/store', [FormResponseController::class, 'store'])->name
 Route::get('/form-responses/{teacherToken}', [FormResponseController::class, 'index']);
 Route::get('/form-responses/{teacherToken}/courses/{courseId}', [FormResponseController::class, 'showResponses'])
     ->name('course.responses');
+
+Route::get('/send-email/{courseId}', [EmailController::class, 'sendEmails'])->name('send.email');

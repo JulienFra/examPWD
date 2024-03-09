@@ -21,11 +21,18 @@
                         <div class="space-x-2">
                             <button @click="confirmDelete(course.id)" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Supprimer</button>
                             <button @click="editCourse(course.id)" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Modifier</button>
+                            <!-- Condition pour afficher le bouton d'envoi d'e-mail en fonction de l'état de la base de données -->
+                            <div v-if="!emailSent[course.id] && course.sent === 0 && isEndTimePassed(course.end_time)">
+    <button @click="sendEmail(course.id)" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Envoyer un e-mail</button>
+</div>
+                            <!-- Affichage du statut d'envoi -->
+                            <span v-else-if="emailSent[course.id]">Formulaire envoyé</span>
                         </div>
                     </div>
                 </li>
             </ul>
         </div>
+
 
         <Link :href="route('courses.create', { id: section.id })" class="text-blue-500 hover:underline block mb-4">Ajouter un cours</Link>
         <Link :href="route('sections.index')" class="text-blue-500 hover:underline">Retour à la liste des sections</Link>
@@ -44,18 +51,29 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { Link } from "@inertiajs/vue3";
+import { ref, onMounted, defineProps } from "vue";
+import { Link, router } from "@inertiajs/vue3";
 import { useForm } from "@inertiajs/vue3";
 
+const emailSent = ref({});
 const confirmingCourseDeletion = ref(false);
 const courseIdToDelete = ref(null);
 const formDeleteCourse = useForm("delete", {});
+
+const props = defineProps(["section"]);
 
 const confirmDelete = (id) => {
     courseIdToDelete.value = id;
     confirmingCourseDeletion.value = true;
 };
+
+onMounted(() => {
+    props.section.courses.forEach(course => {
+        if (course.sent) {
+            emailSent.value[course.id] = true;
+        }
+    });
+});
 
 const deleteCourse = () => {
     formDeleteCourse.delete(route("courses.destroy", courseIdToDelete.value), {
@@ -75,5 +93,24 @@ const editCourse = (id) => {
     window.location.href = route("courses.edit", { courseId: id });
 };
 
-defineProps(["section"]);
+// Vérifier si la date de fin du cours est dépassée
+const isEndTimePassed = (endTime) => {
+    return new Date(endTime) < new Date();
+};
+
+// Rediriger vers la page d'envoi d'e-mail
+const sendEmail = (courseId) => {
+    fetch(route('send.email', { courseId }), {
+        method: 'GET',
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.message); // Afficher le message de réponse
+        emailSent.value = { ...emailSent.value, [courseId]: true }; // Mettre à jour l'état pour indiquer que l'e-mail a été envoyé pour ce cours
+    })
+    .catch(error => {
+        console.error('Une erreur s\'est produite:', error);
+        // Ajouter votre logique ici pour gérer les erreurs
+    });
+};
 </script>

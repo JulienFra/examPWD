@@ -22,8 +22,6 @@ class CourseController extends Controller
         ]);
     }
 
-
-
     public function store(Request $request, $sectionId)
     {
         $request->validate([
