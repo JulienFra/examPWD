@@ -29,6 +29,8 @@ class EmailController extends Controller
             // Générer un lien unique pour chaque étudiant
             $link = 'exampwd.test/formulaire/' . $studentCourse->token;
 
+            $course->update(['sent' => true]);
+
             // Envoyer l'e-mail à l'étudiant
             Mail::to($student->email)->send(new MyEmail($studentCourse->token, $link, $course->name));
         }
@@ -36,6 +38,5 @@ class EmailController extends Controller
 
     return response()->json(['message' => 'E-mails envoyés avec succès pour le cours '.$course->name]);
 }
-
 
 }
