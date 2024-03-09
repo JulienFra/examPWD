@@ -90,9 +90,6 @@
 
     Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
 
-    Route::put('/courses/{courseId}/updateEndTime', [CourseController::class, 'updateEndTime'])->name('update.end_time');
-
-
     Route::middleware([
         'auth:sanctum',
         config('jetstream.auth_session'),
