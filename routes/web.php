@@ -30,7 +30,8 @@ Route::get('/', function () {
     return redirect()->route('admin.actions.index');
 })->name('home');
 
-
+Route::middleware(['auth'])->group(
+    function () {
 
         Route::get('/admin-actions', [AdminActionsController::class, 'index'])->name('admin.actions.index');
         Route::get('/admin-actions/link-index', [AdminActionsController::class, 'linkIndex'])->name('admin-actions.linkIndex');
@@ -76,8 +77,8 @@ Route::get('/', function () {
         Route::put('/courses/{courseId}', [CourseController::class, 'update'])->name('courses.update');
         Route::get('/courses/{courseId}/edit', [CourseController::class, 'edit'])->name('courses.edit');
 
-        Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
         Route::get('/questions', [QuestionController::class, 'index'])->name('questions.index');
+        Route::get('/questions/create', [QuestionController::class, 'create'])->name('questions.create');
         Route::get('/questions/{id}', [QuestionController::class, 'show'])->name('questions.show');
         Route::delete('questions/{id}', [QuestionController::class, 'destroy'])->name('questions.destroy');
 
@@ -91,14 +92,15 @@ Route::get('/', function () {
         Route::put('questions/{id}/update-reponses', [QuestionController::class, 'updateReponses'])->name('questions.updateReponses');
 
         Route::post('/questions', [QuestionController::class, 'store'])->name('questions.store');
+    }
+);
+Route::get('/formulaire/{token}', [FormController::class, 'show'])->name('formulaire.show');
+Route::post('/formulaire/store', [FormResponseController::class, 'store'])->name('formulaire.store');
+Route::get('/form-responses/{teacherToken}', [FormResponseController::class, 'index']);
+Route::get('/form-responses/{teacherToken}/courses/{courseId}', [FormResponseController::class, 'showResponses'])
+    ->name('course.responses');
 
-        Route::get('/formulaire/{token}', [FormController::class, 'show'])->name('formulaire.show');
-        Route::post('/formulaire/store', [FormResponseController::class, 'store'])->name('formulaire.store');
-        Route::get('/form-responses/{teacherToken}', [FormResponseController::class, 'index']);
-        Route::get('/form-responses/{teacherToken}/courses/{courseId}', [FormResponseController::class, 'showResponses'])
-            ->name('course.responses');
-
-        Route::get('/send-email/{courseId}', [EmailController::class, 'sendEmails'])->name('send.email');
+Route::get('/send-email/{courseId}', [EmailController::class, 'sendEmails'])->name('send.email');
 
 Route::middleware([
     'auth:sanctum',
