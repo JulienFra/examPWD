@@ -15,14 +15,14 @@ class FormController extends Controller
     {
         // Trouve le token dans la table "student_courses"
         $studentCourse = StudentCourse::where('token', $token)->where('is_used', false)->first();
-
         // Vérifie si le token existe et n'a pas expiré
         if ($studentCourse) {
             // Marque le token comme utilisé
-            $studentCourse->update(['is_used' => true]);
 
             // Récupère la question spécifique avec son type et ses réponses associées
-            $question = Question::with(['type', 'answers'])->where('is_deleted', '!=', 1)->findOrFail($studentCourse->course_id);
+            $question = Question::with(['type', 'answers'])
+                ->where('is_deleted', false);
+
 
             // Renvoie la vue Inertia 'Formulaire' avec les données nécessaires
             return Inertia::render('Formulaire', [
@@ -37,4 +37,3 @@ class FormController extends Controller
         }
     }
 }
-
