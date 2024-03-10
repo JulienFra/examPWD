@@ -150,7 +150,7 @@ const submitForm = () => {
 
 const paraphraseQuestion = async (questionId) => {
     try {
-        const response = await axios.post(route("paraphrase.route"), {
+        const response = await axios.post(route("OpenAIController"), {
             text: responses.value[questionId],
         });
         paraphrasedResponses.value[questionId] = response.data.paraphrase;

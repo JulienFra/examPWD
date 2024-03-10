@@ -3,6 +3,10 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\OpenAIController;
+use App\Http\Controllers\InstructionController;
+
+
 
 
 
@@ -119,4 +123,10 @@ Route::get('/test-paraphrase', function () {
 
     // Afficher le résultat de la paraphrase
     dd($paraphrasedTextJson);
+
+
+
+    Route::get('/instructions', [InstructionController::class, 'index'])->name('instructions.index');
+    Route::post('/instructions', [InstructionController::class, 'update'])->name('instructions.update');
+    Route::get('/testia', [OpenAIController::class, 'testia']);
 });

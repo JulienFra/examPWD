@@ -3,26 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\OpenAIService;
+use GuzzleHttp\Client;
 
-class FormController extends Controller
+class OpenAIController extends Controller
 {
-    protected $openaiService;
+    protected $client;
 
-    public function __construct(OpenAIService $openaiService)
+    public function __construct(Client $client)
     {
-        $this->openaiService = $openaiService;
+        $this->client = $client;
     }
 
-    public function store(Request $request)
+    public function testAPI()
     {
-        // Valider et enregistrer les données du formulaire
+        $response = $this->client->request('GET', 'files', [
+            'headers' => [
+                'Authorization' => 'Bearer ' . env('OPENAI_API_KEY'),
+            ]
+        ]);
 
-        // Paraphraser la réponse ouverte de l'élève
-        $paraphrasedResponse = $this->openaiService->paraphrase($request->input('open_response'));
+        $data = json_decode($response->getBody()->getContents(), true);
 
-        // Enregistrer la réponse paraphrasée dans la base de données
-
-        // Rediriger ou afficher un message de confirmation
+        return response()->json($data);
     }
 }

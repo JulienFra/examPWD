@@ -47,13 +47,8 @@ class FormController extends Controller
 
     public function store(Request $request)
     {
-        // Valider et enregistrer les données du formulaire
 
         // Paraphraser la réponse ouverte de l'élève
-        $paraphrasedResponse = $this->openaiService->paraphrase($request->input('open_response'));
-
-        // Enregistrer la réponse paraphrasée dans la base de données
-
-        // Rediriger ou afficher un message de confirmation
+        $paraphrasedResponse = $this->openaiService->paraphrase($request->input('o_Answer'));
     }
 }
