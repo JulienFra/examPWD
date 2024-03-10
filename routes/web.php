@@ -31,8 +31,7 @@ Route::get('/', function () {
 })->name('home');
 
 
-Route::middleware(['auth'])->group(
-    function () {
+
         Route::get('/admin-actions', [AdminActionsController::class, 'index'])->name('admin.actions.index');
         Route::get('/admin-actions/link-index', [AdminActionsController::class, 'linkIndex'])->name('admin-actions.linkIndex');
 
@@ -100,8 +99,7 @@ Route::middleware(['auth'])->group(
             ->name('course.responses');
 
         Route::get('/send-email/{courseId}', [EmailController::class, 'sendEmails'])->name('send.email');
-    }
-);
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
